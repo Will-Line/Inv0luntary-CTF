@@ -4,6 +4,7 @@ from flask import Flask, redirect, url_for, request, render_template, jsonify, f
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from sqlalchemy import Integer, String, select
+import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
@@ -38,7 +39,6 @@ class Users(UserMixin, db.Model):
     email = db.Column(db.String(40), unique=True, nullable=False)
     passwords = db.Column(db.String(60), unique=False, nullable=False)
 
-
 class Challenges(db.Model):
    challengeID = db.Column(db.Integer, primary_key=True)
    challengeName = db.Column(db.String(40),unique=True, nullable=False)
@@ -62,9 +62,22 @@ def home():
 def flagSubmit():
    flagText=request.form.get('flag')
    flag=Challenges.query.filter_by(flagText=flagText).first()
+
+   #challengeCompleted=ChallengesCompleted.query.filter_by(userID=current_user.id).all()
+   #challengeCompletedBool=challengeCompleted[0].challenge1
+
+   selectText=text(f"SELECT challenge{flag.challengeID} FROM challenges_completed WHERE userID={current_user.id}")
+   challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
+
    if not flag:
-      return render_template('index.html')  #add in it saying incorrect flag
+      flash("That's not a valid flag. Try again.")
+      return render_template('index.html') 
+   elif challengesCompleted:
+      flash("You've submitted that flag before")
+      return render_template('index.html')
    else:
+      updateChallengeComplete=text(f"UPDATE challenges_completed SET challenge{flag.challengeID}=1 WHERE userID={current_user.id}")
+      db.session.execute(updateChallengeComplete)
       current_user.score+=flag.scoreVal
       db.session.commit()
 
@@ -118,10 +131,10 @@ def signup_post():
 
    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
    new_user = Users(score=0,email=email, name=name, passwords=generate_password_hash(password, method='pbkdf2:sha256'))
-   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0)
+   new_challengeCompleted = ChallengesCompleted(userID=2,challenge1=1, challenge2=1)
 
-   db.session.add(new_challengeCompleted)
    db.session.add(new_user)
+   db.session.add(new_challengeCompleted)
    db.session.commit()
 
    return redirect(url_for('login'))
