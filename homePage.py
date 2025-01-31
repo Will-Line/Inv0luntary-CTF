@@ -63,9 +63,6 @@ def flagSubmit():
    flagText=request.form.get('flag')
    flag=Challenges.query.filter_by(flagText=flagText).first()
 
-   #challengeCompleted=ChallengesCompleted.query.filter_by(userID=current_user.id).all()
-   #challengeCompletedBool=challengeCompleted[0].challenge1
-
    selectText=text(f"SELECT challenge{flag.challengeID} FROM challenges_completed WHERE userID={current_user.id}")
    challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
 
@@ -89,7 +86,11 @@ def howToPlay():
 
 @app.route('/leaderboard')
 def leaderboard():
-   return render_template('leaderboard.html')
+   userQueryText=text("SELECT name,score FROM users")
+
+   usersAndScores=db.session.execute(userQueryText).mappings().all()
+
+   return render_template('leaderboard.html',users=usersAndScores)
 
 @app.route('/login')
 def login():
