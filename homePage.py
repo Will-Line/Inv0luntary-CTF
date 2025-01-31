@@ -63,8 +63,10 @@ def flagSubmit():
    flagText=request.form.get('flag')
    flag=Challenges.query.filter_by(flagText=flagText).first()
 
-   selectText=text(f"SELECT challenge{flag.challengeID} FROM challenges_completed WHERE userID={current_user.id}")
-   challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
+   challengesCompleted=False
+   if flag:
+      selectText=text(f"SELECT challenge{flag.challengeID} FROM challenges_completed WHERE userID={current_user.id}")
+      challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
 
    if not flag:
       flash("That's not a valid flag. Try again.")
