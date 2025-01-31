@@ -6,6 +6,25 @@
 
   {{ navBar("leaderboard") }}
 
+  <table class="table mt-5 table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Place</th>
+        <th scope="col">Username</th>
+        <th scope="col">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in range(usersLength) %}
+      <tr>
+        <th scope="row">{{ i }}</th>
+        <td>{{ users[i].name }}</td>
+        <td>{{ users[i].score }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
   {{ super() }}
     
 {% endblock %}

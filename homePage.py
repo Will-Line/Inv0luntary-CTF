@@ -89,8 +89,8 @@ def leaderboard():
    userQueryText=text("SELECT name,score FROM users")
 
    usersAndScores=db.session.execute(userQueryText).mappings().all()
-
-   return render_template('leaderboard.html',users=usersAndScores)
+   usersAndScores = sorted(usersAndScores, key=lambda d: d['score'], reverse=True)
+   return render_template('leaderboard.html',users=usersAndScores, usersLength=len(usersAndScores))
 
 @app.route('/login')
 def login():
