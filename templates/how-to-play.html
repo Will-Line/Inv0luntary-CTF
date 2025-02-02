@@ -4,8 +4,40 @@
 
 {% block body %}
 
-  {{ navBar("how-to-play") }}
+{{ navBar("how-to-play") }}
 
-  {{ super() }}
-  
+<div class="container">
+  <div class="p-5 mx-5">
+    <h4 class="font-monospace">How to play</h4>
+    <p class="px-5 text-start text font-monospace">
+      The aim of a CTF is to find flags through your technical and problem-solving prowess. There will be a series of
+      challenges for you to complete starting from simple and growing much harder. Each challenge will be hiding a flag
+      in
+      the format <code>!FLAG!{flag_text_here}!FLAG!</code> which will be hidden in: a database, cipher text, locked
+      behind a login
+      page, hidden in an image, or many other challenges you'll face. When you find the flag enter it into the flag box
+      and you'll increase your score, the harder the challenge the more points you'll get.
+    </p>
+  </div>
+
+
+  <div class="px-5 mx-5">
+    <h4 class="font-monospace">Advice</h4>
+    <p class="px-5 text-start font-monospace">
+      Each challenge is possible to solve through free and open source tools, methods and information (since that's how
+      I made them), so just keep researching and testing new things and you can get it eventually.<br /> <br />
+      There are many different areas of challenges which will test different skills, so even if you don't know much
+      programming or web-development you might be able to solve cryptographic challenges much more based on maths and
+      problem solving.
+    </p>
+  </div>
+</div>
+
+<div class="p-5">
+  <h4 class="font-monospace">Good luck and have fun!</h4>
+</div>
+
+
+{{ super() }}
+
 {% endblock %}
