@@ -134,7 +134,7 @@ def signup_post():
 
    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
    new_user = Users(score=0,email=email, name=name, passwords=generate_password_hash(password, method='pbkdf2:sha256'))
-   new_challengeCompleted = ChallengesCompleted(userID=2,challenge1=1, challenge2=1)
+   new_challengeCompleted = ChallengesCompleted(challenge1=1, challenge2=1)
 
    db.session.add(new_user)
    db.session.add(new_challengeCompleted)
