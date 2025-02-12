@@ -4,7 +4,6 @@ from flask import Flask, redirect, url_for, request, render_template, jsonify, f
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from sqlalchemy import Integer, String, select
-import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
@@ -13,6 +12,8 @@ db = SQLAlchemy()
 
 app = Flask(__name__)
 app.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
+
+import SQLLoginChallenge
 
 db_name = 'flask.db'
 
@@ -89,7 +90,7 @@ def flagSubmit():
       flash("Congratulations on a correct flag")
       db.session.commit()
 
-   return render_template('index.html')
+   return redirect('/')
 
 @app.route('/how-to-play')
 def howToPlay():
