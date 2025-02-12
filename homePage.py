@@ -44,6 +44,7 @@ class Challenges(db.Model):
    challengeName = db.Column(db.String(40),unique=True, nullable=False)
    flagText = db.Column(db.String(40), unique=True, nullable=False)
    scoreVal = db.Column(db.Integer, unique=False, nullable=False)
+   challengeType = db.Column(db.String(50),unique=False, nullable=True)
 
 class ChallengesCompleted(db.Model):
    userID = db.Column(db.Integer, primary_key=True)
@@ -55,8 +56,15 @@ with app.app_context():
 
 @app.route('/')
 def home():
-   print(current_user.is_anonymous)
-   return render_template('index.html')
+   userQueryText=text("SELECT challengeName, scoreVal FROM challenges WHERE challengeType=")
+   challengesList=[]
+   taskTypesList=["misc", "web exploitation", "forensics", "reversing", "cryptography"]
+   
+   for i in range(5):
+      userQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
+      challengesList.append(db.session.execute(userQueryText).mappings().all())
+
+   return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList)
 
 @app.route('/',methods={"POST"})
 def flagSubmit():
@@ -78,6 +86,7 @@ def flagSubmit():
       updateChallengeComplete=text(f"UPDATE challenges_completed SET challenge{flag.challengeID}=1 WHERE userID={current_user.id}")
       db.session.execute(updateChallengeComplete)
       current_user.score+=flag.scoreVal
+      flash("Congratulations on a correct flag")
       db.session.commit()
 
    return render_template('index.html')
@@ -134,7 +143,7 @@ def signup_post():
 
    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
    new_user = Users(score=0,email=email, name=name, passwords=generate_password_hash(password, method='pbkdf2:sha256'))
-   new_challengeCompleted = ChallengesCompleted(challenge1=1, challenge2=1)
+   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0)
 
    db.session.add(new_user)
    db.session.add(new_challengeCompleted)

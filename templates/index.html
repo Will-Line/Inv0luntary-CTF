@@ -49,37 +49,31 @@
   </div>
 </div>
 
+
 <div class="container text-center mt-5">
   <div class="row mt-5">
     {% for i in range(5) %}
 
     <div class="col">
-      <h4>Task type</h4>
-    </div>
+      <h4>{{ taskTypesList[i] }}</h4>
 
-    {% endfor %}
-  </div>
-
-  {% for i in range(6) %}
-  <div class="row mt-5">
-    {% for j in range(5) %}
-    <div class="col">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#task{{i*6+j}}">
-        task
+      {% for j in range(challenges[i]|length) %}
+      <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+        data-bs-target="#{{challenges[i][j].challengeID}}">
+        <p>{{ challenges[i][j].challengeName }}<br>Score: {{ challenges[i][j].scoreVal }}</p>
       </button>
+      {% endfor %}
     </div>
     {% endfor %}
   </div>
-  {% endfor %}
-
 </div>
 
-{% macro taskModal(id, title, text) %}
-<div class="modal fade" id="{{ id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{% macro taskModal(id, title, score) %}
+<div class="modal fade" id={{id}} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }}</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }} {{ score }} pts</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -93,12 +87,11 @@
 </div>
 {%- endmacro -%}
 
-{% call taskModal('task0','First steps',' ') %}
+{% call taskModal(1,'First steps',50) %}
 <p>
   Here's an easy one to get you started <br><code>!FLAG!{H4ckers_f1rst_st3ps}!FLAG!</code>
 </p>
 {% endcall %}
-{{ privacyPolicy() }}
 
-{{ super() }}
+{{super()}}
 {% endblock %}
