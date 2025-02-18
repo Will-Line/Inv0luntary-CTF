@@ -4,7 +4,6 @@ from flask import Flask, redirect, url_for, request, render_template, jsonify, f
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from sqlalchemy import Integer, String, select
-from sqlalchemy.orm import Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 
@@ -15,7 +14,7 @@ app.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
 import SQLLoginChallenge
 
-db_name = 'flask.db'
+db_name = 'CTF.db'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
