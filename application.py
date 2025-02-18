@@ -12,8 +12,6 @@ db = SQLAlchemy()
 app = Flask(__name__)
 app.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
-import SQLLoginChallenge
-
 db_name = 'CTF.db'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
