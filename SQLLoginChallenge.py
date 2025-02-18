@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 
-@app.route('/',subdomain='chall2')
-def chall2Home():
+#@app.route('/',subdomain='chall2')
+#def chall2Home():
 
-    return render_template('SQLLoginChallenge/index.html')
+ #   return render_template('SQLLoginChallenge/index.html')
