@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://involuntary:gX_8tf#j1Xit4hHz*zd
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 # initialize the app with Flask-SQLAlchemy
-db.init_app(app)
+#db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.login_view = 'app.login'
