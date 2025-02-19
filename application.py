@@ -7,6 +7,8 @@ from sqlalchemy import Integer, String, select
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 
+print(__name__)
+
 db = SQLAlchemy()
 
 app = Flask(__name__)
