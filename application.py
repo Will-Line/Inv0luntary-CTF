@@ -77,10 +77,10 @@ def flagSubmit():
 
    if not flag:
       flash("That's not a valid flag. Try again.")
-      return render_template('index.html') 
+      return redirect(url_for('home'))
    elif challengesCompleted:
       flash("You've submitted that flag before")
-      return render_template('index.html')
+      return redirect(url_for('home'))
    else:
       updateChallengeComplete=text(f"UPDATE challenges_completed SET challenge{flag.challengeID}=1 WHERE userID={current_user.id}")
       db.session.execute(updateChallengeComplete)
@@ -88,7 +88,7 @@ def flagSubmit():
       flash("Congratulations on a correct flag")
       db.session.commit()
 
-   return redirect('/')
+   return redirect(url_for('home'))
 
 @application.route('/how-to-play')
 def howToPlay():
@@ -159,5 +159,5 @@ def logout():
 if __name__ == '__main__':
    #website_url='involuntaryCTF:5000'
    #application.config['SERVER_NAME']=website_url
-   application.run(debug=False)
+   application.run(debug=True)
 
