@@ -7,6 +7,8 @@ from sqlalchemy import Integer, String, select
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 
+db = SQLAlchemy()
+
 app = Flask(__name__)
 app.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
@@ -16,8 +18,6 @@ db_name = 'CTF.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-db = SQLAlchemy(app)
 
 # initialize the app with Flask-SQLAlchemy
 db.init_app(app)
