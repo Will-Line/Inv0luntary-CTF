@@ -9,22 +9,22 @@ from flask_login import UserMixin, LoginManager, login_user, login_required, cur
 
 db = SQLAlchemy()
 
-app = Flask(__name__)
-app.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
+application = Flask(__name__)
+application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
 db_name = 'CTF.db'
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+#application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 # initialize the app with Flask-SQLAlchemy
-db.init_app(app)
+db.init_app(application)
 
 login_manager = LoginManager()
-login_manager.login_view = 'app.login'
-login_manager.init_app(app)
+login_manager.login_view = 'application.login'
+login_manager.init_app(application)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -50,10 +50,10 @@ class ChallengesCompleted(db.Model):
    challenge1 = db.Column(db.Boolean)
    challenge2 = db.Column(db.Boolean)
 
-with app.app_context():
+with application.app_context():
     db.create_all()
 
-@app.route('/')
+@application.route('/')
 def home():
    userQueryText=text("SELECT challengeName, scoreVal FROM challenges WHERE challengeType=")
    challengesList=[]
@@ -65,7 +65,7 @@ def home():
 
    return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList)
 
-@app.route('/',methods={"POST"})
+@application.route('/',methods={"POST"})
 def flagSubmit():
    flagText=request.form.get('flag')
    flag=Challenges.query.filter_by(flagText=flagText).first()
@@ -90,11 +90,11 @@ def flagSubmit():
 
    return redirect('/')
 
-@app.route('/how-to-play')
+@application.route('/how-to-play')
 def howToPlay():
    return render_template('how-to-play.html')
 
-@app.route('/leaderboard')
+@application.route('/leaderboard')
 def leaderboard():
    userQueryText=text("SELECT name,score FROM users")
 
@@ -102,11 +102,11 @@ def leaderboard():
    usersAndScores = sorted(usersAndScores, key=lambda d: d['score'], reverse=True)
    return render_template('leaderboard.html',users=usersAndScores, usersLength=len(usersAndScores))
 
-@app.route('/login')
+@application.route('/login')
 def login():
    return render_template('login.html')
 
-@app.route('/login', methods={'POST'})
+@application.route('/login', methods={'POST'})
 def login_post():
    name = request.form.get('inputUsername')
    password = request.form.get('inputPassword')
@@ -123,11 +123,11 @@ def login_post():
    login_user(user, remember=remember)
    return redirect('/')
 
-@app.route('/signup')
+@application.route('/signup')
 def signup():
    return render_template('signup.html')
 
-@app.route('/signup', methods=['POST'])
+@application.route('/signup', methods=['POST'])
 def signup_post():
    # code to validate and add user to database goes here
    email = request.form.get('inputEmail')
@@ -150,7 +150,7 @@ def signup_post():
 
    return redirect(url_for('login'))
 
-@app.route('/logout')
+@application.route('/logout')
 @login_required
 def logout():
    logout_user()
@@ -158,6 +158,6 @@ def logout():
 
 if __name__ == '__main__':
    #website_url='involuntaryCTF:5000'
-   #app.config['SERVER_NAME']=website_url
-   app.run(debug=False)
+   #application.config['SERVER_NAME']=website_url
+   application.run(debug=False)
 
