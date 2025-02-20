@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 db_name = 'CTF.db'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
