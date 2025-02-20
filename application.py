@@ -7,12 +7,10 @@ from sqlalchemy import Integer, String, select
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 
-print(__name__)
-
-db = SQLAlchemy()
-
 app = Flask(__name__)
 app.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
+
+db = SQLAlchemy(app)
 
 db_name = 'CTF.db'
 
