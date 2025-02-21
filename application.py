@@ -6,6 +6,7 @@ from sqlalchemy.sql import text
 from sqlalchemy import Integer, String, select
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
+import time
 
 db = SQLAlchemy()
 
@@ -14,8 +15,8 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
 db_name = 'CTF.db'
 
-#application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
+#application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -63,7 +64,9 @@ def home():
       userQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
       challengesList.append(db.session.execute(userQueryText).mappings().all())
 
-   return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList)
+   beginCTF=(time.time()>1751047200)   #1751047200
+
+   return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF)
 
 @application.route('/',methods={"POST"})
 def flagSubmit():

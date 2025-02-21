@@ -6,57 +6,13 @@
 
 {{ navBar("home") }}
 
-<div class="container text-center mt-3">
-  <div class="row">
-    {% if current_user.is_anonymous%}
-    <div class="col" hidden>
-      <p class="p-2">Score: {{ current_user.score }}</p>
-    </div>
-
-    <div class="col">
-      <form method="POST" hidden>
-        <input type="text" name="flag" id="flag" class="form-control p-2" placeholder="Flag" aria-label="Flag">
-      </form>
-    </div>
-
-    {% else %}
-    <div class="col">
-      <p class="p-2">Score: {{ current_user.score }}</p>
-    </div>
-
-    <div class="col">
-      <form method="POST">
-        <input type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag" aria-label="Flag">
-      </form>
-    </div>
-    {% endif %}
-
-
-    <div class="dropdown col">
-      <!--<button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Filter
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-      </ul> -->
-    </div>
-  </div>
-
-  <div class="row">
-    {{ flashMessages() }}
-  </div>
-</div>
-
-{% if current_user.is_anonymous %}
+{% if current_user.is_anonymous or not beginCTF %}
 <h1 class="m-5">Challenge begins in:</h1>
 <h1 class="m-5 display-5" id="countdown"></h1>
 
 <script>
   // Set the date we're counting down to
-  var countDownDate = new Date("Jun 30, 2025 19:00:00").getTime();
+  var countDownDate = new Date("Jun 27, 2025 19:00:00").getTime();
 
   // Update the count down every 1 second
   var x = setInterval(function () {
@@ -85,6 +41,33 @@
   }, 1000);
 </script>
 {% else %}
+
+<div class="row mt-3">
+  <div>
+  {{ flashMessages() }}
+</div>
+<div class="col">
+  <p class="p-2">Score: {{ current_user.score }}</p>
+</div>
+
+<div class="col">
+  <form method="POST">
+    <input type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag" aria-label="Flag">
+  </form>
+</div>
+<div class="dropdown col">
+  <!--<button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
+    aria-expanded="false">
+    Filter
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul> -->
+</div>
+</div>
+
 <div class="container text-center mt-5">
   <div class="row mt-5">
     {% for i in range(5) %}
