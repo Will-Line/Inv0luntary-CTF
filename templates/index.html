@@ -31,8 +31,9 @@
     </div>
     {% endif %}
 
+
     <div class="dropdown col">
-      <button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
+      <!--<button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
         aria-expanded="false">
         Filter
       </button>
@@ -40,7 +41,7 @@
         <li><a class="dropdown-item" href="#">Action</a></li>
         <li><a class="dropdown-item" href="#">Another action</a></li>
         <li><a class="dropdown-item" href="#">Something else here</a></li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 
@@ -49,7 +50,41 @@
   </div>
 </div>
 
+{% if current_user.is_anonymous %}
+<h1 class="m-5">Challenge begins in:</h1>
+<h1 class="m-5 display-5" id="countdown"></h1>
 
+<script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("Jun 30, 2025 19:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function () {
+
+    // Get today's date and time
+    var now = new Date().getTime();
+
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Output the result in an element with id="demo"
+    document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
+      + minutes + "m " + seconds + "s ";
+
+    // If the count down is over, write some text 
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("countdown").innerHTML = "Challenge begun! Log in to see the challenges";
+    }
+  }, 1000);
+</script>
+{% else %}
 <div class="container text-center mt-5">
   <div class="row mt-5">
     {% for i in range(5) %}
@@ -67,6 +102,7 @@
     {% endfor %}
   </div>
 </div>
+{% endif %}
 
 {% macro taskModal(id, title, score) %}
 <div class="modal fade" id={{id}} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
