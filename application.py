@@ -16,7 +16,7 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 db_name = 'CTF.db'
 
 #application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:gX_8tf#j1Xit4hHz*zd-*mCz5SAB@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:N!u2md85ply9QFM0h!fguhcbV(99@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
