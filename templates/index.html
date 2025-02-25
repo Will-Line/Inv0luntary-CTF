@@ -4,6 +4,25 @@
 
 {% block body %}
 
+{% macro taskModal(id, title, score) %}
+<div class="modal fade" id={{id}} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }} {{ score }} pts</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{caller()}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endmacro -%}
+
 {{ navBar("home") }}
 
 {% if current_user.is_anonymous or not beginCTF %}
@@ -85,32 +104,13 @@
     {% endfor %}
   </div>
 </div>
-{% endif %}
-
-{% macro taskModal(id, title, score) %}
-<div class="modal fade" id={{id}} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }} {{ score }} pts</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        {{caller()}}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-{%- endmacro -%}
 
 {% call taskModal(1,'First steps',50) %}
 <p>
   Here's an easy one to get you started <br><code>!FLAG!{H4ckers_f1rst_st3ps}!FLAG!</code>
 </p>
 {% endcall %}
+{% endif %}
 
 {{super()}}
 {% endblock %}
