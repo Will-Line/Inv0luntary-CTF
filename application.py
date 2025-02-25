@@ -7,6 +7,33 @@ from sqlalchemy import Integer, String, select
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 import time
+import boto3
+from botocore.exceptions import ClientError
+
+def get_secret():
+
+    secret_name = "rds!db-5420f6d2-147d-4fdf-99ac-f9c4d879f542"
+    region_name = "eu-west-2"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        # For a list of exceptions thrown, see
+        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+        raise e
+
+    secret = get_secret_value_response['SecretString']
+
+    return secret
 
 db = SQLAlchemy()
 
@@ -16,7 +43,7 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 db_name = 'CTF.db'
 
 #application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'a
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://involuntary:N!u2md85ply9QFM0h!fguhcbV(99@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
