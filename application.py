@@ -32,7 +32,8 @@ def get_secret():
         raise e
 
     secret = get_secret_value_response['SecretString']
-    return secret.password
+    print(secret)
+    return secret
 
 db = SQLAlchemy()
 
