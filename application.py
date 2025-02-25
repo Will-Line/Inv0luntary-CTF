@@ -32,8 +32,7 @@ def get_secret():
         raise e
 
     secret = get_secret_value_response['SecretString']
-    print(secret)
-    return secret
+    return secret.password
 
 db = SQLAlchemy()
 
@@ -43,7 +42,7 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 db_name = 'CTF.db'
 
 #application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'a
-application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{get_secret().username}:{get_secret().password}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
