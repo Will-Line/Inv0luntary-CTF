@@ -4,12 +4,16 @@
 
 {% block body %}
 
-{% macro taskModal(id, title, score) %}
+{% macro taskModal(id, title, score, completed) %}
 <div class="modal fade" id={{id}} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
+        {% if completed %}
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }} {{ score }} pts - completed</h1>
+        {% else %}
         <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }} {{ score }} pts</h1>
+        {% endif %}
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -63,19 +67,19 @@
 
 <div class="row mt-3">
   <div>
-  {{ flashMessages() }}
-</div>
-<div class="col">
-  <p class="p-2">Score: {{ current_user.score }}</p>
-</div>
+    {{ flashMessages() }}
+  </div>
+  <div class="col">
+    <p class="p-2">Score: {{ current_user.score }}</p>
+  </div>
 
-<div class="col">
-  <form method="POST">
-    <input type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag" aria-label="Flag">
-  </form>
-</div>
-<div class="dropdown col">
-  <!--<button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
+  <div class="col">
+    <form method="POST">
+      <input type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag" aria-label="Flag">
+    </form>
+  </div>
+  <div class="dropdown col">
+    <!--<button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
     aria-expanded="false">
     Filter
   </button>
@@ -84,7 +88,7 @@
     <li><a class="dropdown-item" href="#">Another action</a></li>
     <li><a class="dropdown-item" href="#">Something else here</a></li>
   </ul> -->
-</div>
+  </div>
 </div>
 
 <div class="container text-center mt-5">
@@ -95,17 +99,24 @@
       <h4>{{ taskTypesList[i] }}</h4>
 
       {% for j in range(challenges[i]|length) %}
+      {% if challengesCompleted[j+1][1] %}
+      <button type="button" class="btn btn-primary mt-3 opacity-50" data-bs-toggle="modal"
+        data-bs-target="#{{challenges[i][j].challengeID}}">
+        <p>{{ challenges[i][j].challengeName }}<br>Score: {{ challenges[i][j].scoreVal }}</p>
+      </button>
+      {% else %}
       <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
         data-bs-target="#{{challenges[i][j].challengeID}}">
         <p>{{ challenges[i][j].challengeName }}<br>Score: {{ challenges[i][j].scoreVal }}</p>
       </button>
+      {% endif %}
       {% endfor %}
     </div>
     {% endfor %}
   </div>
 </div>
 
-{% call taskModal(1,'First steps',50) %}
+{% call taskModal(1,'First steps',50, challengesCompleted[1][1]) %}
 <p>
   Here's an easy one to get you started <br><code>!FLAG!{H4ckers_f1rst_st3ps}!FLAG!</code>
 </p>

@@ -82,17 +82,22 @@ with application.app_context():
 
 @application.route('/')
 def home():
-   userQueryText=text("SELECT challengeName, scoreVal FROM challenges WHERE challengeType=")
    challengesList=[]
    taskTypesList=["misc", "web exploitation", "forensics", "reversing", "cryptography"]
    
    for i in range(5):
-      userQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
-      challengesList.append(db.session.execute(userQueryText).mappings().all())
+      challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
+      challengesList.append(db.session.execute(challengesQueryText).mappings().all())
 
-   beginCTF=(time.time()>1751047200)   #1751047200
+   if current_user.is_anonymous:
+      userChallengesCompleted=[]
+   else:      
+      challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
+      userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
 
-   return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF)
+   beginCTF=(time.time()>1731047200)   #1751047200
+
+   return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted)
 
 @application.route('/',methods={"POST"})
 def flagSubmit():

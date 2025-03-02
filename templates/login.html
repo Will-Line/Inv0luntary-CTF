@@ -4,30 +4,37 @@
 
 {% block body %}
 
-  {{ navBar("login") }}
-  
-  <form method="POST" class="form-signin mt-5" data-protonpass-form="">
-    <h1 class="h3 mb-3 font-weight-normal">Log in</h1>
-    <label for="inputUsername" class="sr-only">Username</label>
-    <input type="text" name="inputUsername" id="inputUsername" class="form-control" placeholder="Username" required="" autofocus="">
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required="">
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" name="remember-me" value="remember-me"> Remember me</input>
-      </label>
-    </div>
+{{ navBar("login") }}
 
-    {{ flashMessages() }}
+<form method="POST" class="form-signin mt-5" data-protonpass-form="">
+  <h1 class="h3 mb-3 font-weight-normal">Log in</h1>
+  <label for="inputUsername" class="sr-only">Username</label>
+  <input type="text" name="inputUsername" id="inputUsername" class="form-control row" placeholder="Username" required=""
+    autofocus="">
+  <label for="inputPassword" class="sr-only">Password</label>
+  <div class="row">
+    <input type="password" name="inputPassword" id="inputPassword" class="form-control col" placeholder="Password"
+      required="">
+    <p class="col p-3">
+      <input type="checkbox" onclick="togglePassword('inputPassword')"> Show password
+    </p>
+  </div>
+  <div class="checkbox mb-3">
+    <label>
+      <input type="checkbox" name="remember-me" value="remember-me"> Remember me</input>
+    </label>
+  </div>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
-    <div class="p-2">
-      <a href="/signup">No account -> Sign up</a>
-    </div>
-    
-  </form>
+  {{ flashMessages() }}
 
-  
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+  <div class="p-2">
+    <a href="/signup">No account -> Sign up</a>
+  </div>
 
-  {{ super() }}
+</form>
+
+
+
+{{ super() }}
 {% endblock %}
