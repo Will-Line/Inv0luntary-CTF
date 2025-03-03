@@ -1,6 +1,6 @@
 import socket
 
-IP = "127.0.0.1"
+IP = "myctf-env.eba-bd2y2npx.eu-west-2.elasticbeanstalk.com"
 PORT = 5005
 
 sock = socket.socket(socket.AF_INET, # Internet
