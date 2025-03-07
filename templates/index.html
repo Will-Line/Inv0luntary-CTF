@@ -99,7 +99,7 @@
       <h4>{{ taskTypesList[i] }}</h4>
 
       {% for j in range(challenges[i]|length) %}
-      {% if challengesCompleted[j+1][1] %}
+      {% if challengesCompleted[challenges[i][j].challengeID][1] %}
       <button type="button" class="btn btn-primary mt-3 opacity-50" data-bs-toggle="modal"
         data-bs-target="#{{challenges[i][j].challengeID}}">
         <p>{{ challenges[i][j].challengeName }}<br>Score: {{ challenges[i][j].scoreVal }}</p>
@@ -122,7 +122,11 @@
 </p>
 {% endcall %}
 
-
+{% call taskModal(2,'Timeline',300, challengesCompleted[1][2]) %}
+<p>
+  Help! I've gotten my files all confused. Please help me reorganise them and answer my questions. I'll give you a flag if you help me fully.
+</p>
+{% endcall %}
 {% endif %}
 
 {{super()}}

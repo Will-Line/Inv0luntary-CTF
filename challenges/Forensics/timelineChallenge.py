@@ -32,7 +32,7 @@ while True:
     sock.listen(0)
     questionReponseBool=[]
     client_socket, client_address = sock.accept()
-    client_socket.send("Help! I've gotten my files all confused. Please help me reorganise them answer my questions. I'll give you a flag if you help me fully. \n".encode("utf-8"))
+    client_socket.send("Help! I've gotten my files all confused. Please help me reorganise them and answer my questions. I'll give you a flag if you help me fully. \n".encode("utf-8"))
 
     for i in range(len(questions)):
         client_socket.send(questions[i].encode("utf-8"))
