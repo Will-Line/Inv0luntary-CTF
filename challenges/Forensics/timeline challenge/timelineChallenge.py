@@ -18,7 +18,7 @@ questions=[
 "\nWhat is my password I hid in the answer to the last question?  "
 ]
 questionAnswers=[
-"BMP\n",
+"jpg\n",
 "File 2\n",
 "File 3\n",
 "File 1\n",

@@ -1,6 +1,6 @@
 #Remember you have deprecated to Flask 2.3.3
 
-from flask import Flask, redirect, url_for, request, render_template, jsonify, flash
+from flask import Flask, redirect, url_for, request, render_template, jsonify, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from sqlalchemy import Integer, String, select
@@ -41,8 +41,8 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
 db_name = 'CTF.db'
 
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-#application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+#application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
+application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -189,6 +189,12 @@ def signup_post():
 def logout():
    logout_user()
    return redirect('/')
+
+@application.route('/download')
+def download():
+    path='/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/files.zip'
+    #path='/'
+    return send_file(path, as_attachment=True)
 
 if __name__ == '__main__':
    #website_url='involuntaryCTF:5000'
