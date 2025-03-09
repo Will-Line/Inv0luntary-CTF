@@ -58,13 +58,43 @@
             <a class="nav-link" href="/login">Login/sign-up</a>
             {% endif %}
             {% else %}
-            <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+            <a class="nav-link" data-bs-toggle="offcanvas" href="#accountOffCanvas" role="button" aria-controls="accountOffCanvas">
+              Account
+            </a>
             {% endif %}
           </li>
         </ul>
       </div>
     </div>
   </nav>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="accountOffCanvas" aria-labelledby="accountOffCanvasLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="accountOffCanvasLabel">{{current_user.name}}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="col">
+        <div class="row">
+          <p>score - {{current_user.score}} pts</p>
+        </div>
+
+        <div class="row">
+          <p>username - {{current_user.name}}</p>
+        </div>
+
+        <div class="row">
+          <p>email - {{current_user.email}}</p>
+        </div>
+
+        <div class="row">
+          <a class="btn btn-primary mt-3" type="button" href="/changePassword">Change password</a>
+        </div>
+        
+        <a class="btn btn-primary btn-danger m-5" type="button" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+      </div>
+    </div>
+  </div>
 
   <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -41,8 +41,8 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
 db_name = 'CTF.db'
 
-#application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
+#application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -183,6 +183,12 @@ def signup_post():
    db.session.commit()
 
    return redirect(url_for('login'))
+
+@application.route('/account')
+@login_required
+def account():
+
+   return render_template('account.html')
 
 @application.route('/logout')
 @login_required
