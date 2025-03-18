@@ -3,22 +3,24 @@
 <html lang="en">
 
 {% block body %}
-    <form method="POST" class="form-signin mt-5">
-      <h1 class="h3 mb-3 font-weight-normal">Sign up</h1>
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-      <label for="inputUsername" class="sr-only">Username</label>
-      <input type="text" name="inputUsername" id="inputUsername" class="form-control" placeholder="Username" required="" autofocus="">
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required="">
-      <p class="col p-3">
-        <input type="checkbox" onclick="togglePassword('inputPassword')"> Show password
-      </p>
+<form method="POST" class="form-signin mt-5">
+  <h1 class="h3 mb-3 font-weight-normal">Sign up</h1>
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required=""
+    autofocus="">
+  <label for="inputUsername" class="sr-only">Username</label>
+  <input type="text" name="inputUsername" id="inputUsername" class="form-control" placeholder="Username" required=""
+    autofocus="">
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password"
+    required="">
+  <p class="col p-3">
+    <input type="checkbox" onclick="togglePassword('inputPassword')"> Show password
+  </p>
 
-      {{ flashMessages() }}
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-    </form>
-  
+  {{ flashMessages() }}
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+</form>
+
 
 {% endblock %}
-

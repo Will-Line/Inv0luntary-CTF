@@ -58,7 +58,8 @@
             <a class="nav-link" href="/login">Login/sign-up</a>
             {% endif %}
             {% else %}
-            <a class="nav-link" data-bs-toggle="offcanvas" href="#accountOffCanvas" role="button" aria-controls="accountOffCanvas">
+            <a class="nav-link" data-bs-toggle="offcanvas" href="#accountOffCanvas" role="button"
+              aria-controls="accountOffCanvas">
               Account
             </a>
             {% endif %}
@@ -87,16 +88,20 @@
           <p>email - {{current_user.email}}</p>
         </div>
 
+        <a class="btn btn-primary m-3" type="button" data-bs-toggle="modal" data-bs-target="#changeEmail">Change
+          email</a>
+
         <div class="row">
           <a class="btn btn-primary mt-3" type="button" href="/changePassword">Change password</a>
         </div>
-        
-        <a class="btn btn-primary btn-danger m-5" type="button" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+
+        <a class="btn btn-primary btn-danger m-5" type="button" data-bs-toggle="modal"
+          data-bs-target="#logout">Logout</a>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logoutModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
@@ -110,6 +115,36 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="modal fade" id="changeEmail" tabindex="-1" aria-labelledby="changeEmailModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="POST" class="form-signin mt-3" action="/reset-email">
+          <div class="modal-body">
+            Enter the new email and your password.<br><br>
+
+            <label for="newEmail" class="sr-only">New email address</label>
+            <input type="email" name="newEmail" id="newEmail" class="form-control" placeholder="Email address"
+              required="" autofocus="">
+            <label for="password" class="sr-only">Current password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+              required="">
+            <p class="col p-3">
+              <input type="checkbox" onclick="togglePassword('inputPassword')"> Show password
+            </p>
+
+            {{ flashMessages() }}
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="submit">Enter</button>
+        </form>
+        </a>
+      </div>
+    </div>
+  </div>
   </div>
   {%- endmacro %}
 

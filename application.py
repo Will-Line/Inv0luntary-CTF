@@ -202,6 +202,41 @@ def download():
     #path='/'
     return send_file(path, as_attachment=True)
 
+@application.route('/reset-email', methods=['POST'])
+@login_required
+def changeEmail():
+   email = request.form.get('newEmail')
+   password = request.form.get('password')
+
+   user = Users.query.filter_by(name=current_user.name).first()
+
+    # check if the user actually exists
+    # take the user-supplied password, hash it, and compare it to the hashed password in the database
+   if not user or not check_password_hash(user.passwords, password):
+        flash('Incorrect password')
+        return redirect('/') # if the user doesn't exist or password is wrong, reload the page
+
+   if current_user.email==email:
+      flash('Must be a new email')
+      return redirect('/')
+
+   query=text(f"UPDATE users SET email='{email}' WHERE id={current_user.id};")
+   db.session.execute(query)
+   db.session.commit()
+   return redirect('/')
+
+@application.route()
+@login_required
+def changePassword():
+   currentPassword = request.form.get('inputPassword')
+   newPassword= request.form.get()
+
+   query=text(f"UPDATE users SET passwords={generate_password_hash(newPassword, method='pbkdf2:sha256')} WHERE id={current_user.id}")
+   db.session.execute(query)
+   db.session.commit()
+
+   return redirect(url_for('login'))
+
 if __name__ == '__main__':
    #website_url='involuntaryCTF:5000'
    #application.config['SERVER_NAME']=website_url
