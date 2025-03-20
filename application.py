@@ -225,17 +225,29 @@ def changeEmail():
    db.session.commit()
    return redirect('/')
 
-@application.route()
+@application.route('/reset-password', methods=['POST'])
 @login_required
 def changePassword():
-   currentPassword = request.form.get('inputPassword')
-   newPassword= request.form.get()
+   currentPassword = request.form.get('currentPassword')
+   newPassword= request.form.get('newPassword')
+   hashedNewPassword=generate_password_hash(newPassword, method='pbkdf2:sha256')
 
-   query=text(f"UPDATE users SET passwords={generate_password_hash(newPassword, method='pbkdf2:sha256')} WHERE id={current_user.id}")
+   user = Users.query.filter_by(name=current_user.name).first()
+
+    # check if the user actually exists
+    # take the user-supplied password, hash it, and compare it to the hashed password in the database
+   if not user or not check_password_hash(user.passwords, currentPassword):
+      flash('Incorrect password')
+      return redirect('/') # if the user doesn't exist or password is wrong, reload the page
+   elif current_user.passwords==hashedNewPassword:
+      flash('Can\'t have the same password')
+      return redirect('/')
+
+   query=text(f"UPDATE users SET passwords='{hashedNewPassword}' WHERE id={current_user.id};")
    db.session.execute(query)
    db.session.commit()
 
-   return redirect(url_for('login'))
+   return redirect(url_for('/'))
 
 if __name__ == '__main__':
    #website_url='involuntaryCTF:5000'
