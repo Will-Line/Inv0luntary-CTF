@@ -1,6 +1,6 @@
 #Remember you have deprecated to Flask 2.3.3
 
-from flask import Flask, redirect, url_for, request, render_template, jsonify, flash, send_file
+from flask import Flask, redirect, url_for, request, render_template, jsonify, flash, send_file, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from sqlalchemy import Integer, String, select
@@ -11,28 +11,27 @@ import boto3
 from botocore.exceptions import ClientError
 
 def get_secret():
+   secret_name = "rds!db-5420f6d2-147d-4fdf-99ac-f9c4d879f542"
+   region_name = "eu-west-2"
 
-    secret_name = "rds!db-5420f6d2-147d-4fdf-99ac-f9c4d879f542"
-    region_name = "eu-west-2"
+   # Create a Secrets Manager client
+   session = boto3.session.Session()
+   client = session.client(
+      service_name='secretsmanager',
+      region_name=region_name
+   )
 
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
+   try:
+      get_secret_value_response = client.get_secret_value(
+         SecretId=secret_name
+      )
+   except ClientError as e:
+      # For a list of exceptions thrown, see
+      # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+      raise e
 
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
-
-    secret = get_secret_value_response['SecretString']
-    return secret.split("\"")[7]
+   secret = get_secret_value_response['SecretString']
+   return secret.split("\"")[7]
 
 db = SQLAlchemy()
 
@@ -50,7 +49,7 @@ application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db.init_app(application)
 
 login_manager = LoginManager()
-login_manager.login_view = 'application.login'
+login_manager.login_view = 'login'
 login_manager.init_app(application)
 
 @login_manager.user_loader
@@ -79,6 +78,7 @@ class ChallengesCompleted(db.Model):
 
 with application.app_context():
     db.create_all()
+
 
 @application.route('/')
 def home():
@@ -184,12 +184,6 @@ def signup_post():
 
    return redirect(url_for('login'))
 
-@application.route('/account')
-@login_required
-def account():
-
-   return render_template('account.html')
-
 @application.route('/logout')
 @login_required
 def logout():
@@ -197,6 +191,7 @@ def logout():
    return redirect('/')
 
 @application.route('/download')
+@login_required
 def download():
     path='/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/files.zip'
     #path='/'
@@ -250,7 +245,7 @@ def changePassword():
    return redirect(url_for('/'))
 
 if __name__ == '__main__':
-   #website_url='involuntaryCTF:5000'
-   #application.config['SERVER_NAME']=website_url
+   website_url='involuntaryCTF:5000'
+   application.config['SERVER_NAME']=website_url
    application.run(debug=True)
 
