@@ -4,7 +4,7 @@ import socket
 import random
 
 IP = "127.0.0.1"
-PORT = 5007
+PORT = 5006
 
 sock = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_STREAM) # UDP
