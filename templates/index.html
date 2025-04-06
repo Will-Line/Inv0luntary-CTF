@@ -130,7 +130,7 @@
   <code>nc ec2-user@ec2-35-176-229-184.eu-west-2.compute.amazonaws.com 5005</code> 
 </p>
 
-<a href="/download">files</a>
+<a href="/downloadTimeline">files</a>
 {% endcall %}
 
 
@@ -158,6 +158,19 @@
 </p>
 {% endcall %}
 
+{% call taskModal(6,'this flaG Doesn\'t Bite',250, challengesCompleted[1][6]) %}
+<p>
+  Can you work out the text of the hex that was entered in line <code>0x00000000000011ac</code> and moved into the <code>rax</code> register when I got the output <code>2d5a0b1c0e2f3d3e</code>.   
+  
+  <br>
+  <br>
+  Workout what text originally was entered in and wrap it in <br><code>!FLAG!{flag_here}!FLAG!</code>
+  <br>
+
+  <br>
+  <a href="/downloadFlagDoesntBite">file</a>
+</p>
+{% endcall %}
 {% endif %}
 
 

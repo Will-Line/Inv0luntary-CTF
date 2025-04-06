@@ -190,10 +190,17 @@ def logout():
    logout_user()
    return redirect('/')
 
-@application.route('/download')
+@application.route('/downloadTimeline')
 @login_required
-def download():
+def downloadTimeline():
     path='/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/files.zip'
+    #path='/'
+    return send_file(path, as_attachment=True)
+
+@application.route('/downloadFlagDoesntBite')
+@login_required
+def downloadFlagDoesntBite():
+    path='/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Reverse engineering/basic assembly/a.out'
     #path='/'
     return send_file(path, as_attachment=True)
 
