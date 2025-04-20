@@ -182,14 +182,39 @@
   your comments at those coordinates.
   <br>
   <br>
-  Tip: ou must enter the coordinates to the max precision for the file.
+  Tip: You must enter the coordinates to the max precision for the file.
   <br>
   <br>
 
   <a href="/">link</a>
 </p>
 {% endcall %}
+
+{% call taskModal(8,'Basic python',100, challengesCompleted[1][8]) %}
+<p>
+  I made some basic python code to help you practise your reversing skills. Its output was <code>[33, 73, 32, 103, 39, 106, -2, 159, 0, 151, 80, 140, 66, 128, 87, 78, 79, 119, 27, 117, 8237, 95, 91, 133, 80, 135, 80, 130, 39, 116, 105, 105, 110, 56, 71, 129, 28, 75, 62, 78, 69]
+  </code>
+  <br>
+  <br>
+
+  <a href="/downloadBasicPython">file</a>
+</p>
+{% endcall %}
+
+{% call taskModal(9,'Lottery',250, challengesCompleted[1][9]) %}
+<p>
+  I've made a lottery but you'll never win it. Your chance is 1 in 10^19 which is equivalent to rolling a d10 19 times and getting the same thing.
+  <br>
+  <br>
+
+  <a href="/rollthedice">Lottery</a>
+</p>
+{% endcall %}
 {% endif %}
 
 {{super()}}
 {% endblock %}
+
+
+
+

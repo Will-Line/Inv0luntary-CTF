@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <h2>Welcome to my unwinnable lottery</h2>
+</head>
+
+<body>
+    <script>
+        function isNumeric(value) {
+            return /^-?\d+$/.test(value);
+        }
+
+        async function lottery() {
+            string = document.getElementById("userString").value;
+            output = document.getElementById("display");
+            if (!isNumeric(string)) {
+                output.innerHTML = "Must enter a number";
+            }
+            else {
+                randomNum=Math.random().toString();
+                console.log(randomNum);
+                randomNum = randomNum.substr(2,randomNum.length);
+
+                resultjson=""
+                try {
+                    const response = await fetch("/rollthedice/flag", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({number:randomNum,guess:string}),
+                    });
+
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        resultjson = await result.flag
+                        
+
+                    } else {
+                        console.error('Error:', response.status, response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error:', error.message);
+                }
+
+                output.innerHTML=resultjson;
+            }
+        }
+    </script>
+
+    <div>
+        <label>Enter your guess here</label>
+        <input type="text" name="userString" id="userString" placeholder="enter guess here">
+        <button onclick="lottery()">Enter</button>
+    </div>
+
+    <div>
+        <p id="display"></p>
+    </div>
+</body>

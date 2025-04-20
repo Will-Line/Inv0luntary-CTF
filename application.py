@@ -193,14 +193,21 @@ def logout():
 @application.route('/downloadTimeline')
 @login_required
 def downloadTimeline():
-    path='/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/files.zip'
+    path='challenges/Forensics/timeline challenge/files.zip'
     #path='/'
     return send_file(path, as_attachment=True)
 
 @application.route('/downloadFlagDoesntBite')
 @login_required
 def downloadFlagDoesntBite():
-    path='/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Reverse engineering/basic assembly/a.out'
+    path='challenges/Reverse engineering/basic assembly/a.out'
+    #path='/'
+    return send_file(path, as_attachment=True)
+
+@application.route('/downloadBasicPython')
+@login_required
+def downloadBasicPython():
+    path='challenges/Reverse engineering/Basic python/basicPython.py'
     #path='/'
     return send_file(path, as_attachment=True)
 
@@ -250,6 +257,23 @@ def changePassword():
    db.session.commit()
 
    return redirect(url_for('/'))
+
+@application.route('/rollthedice')
+def rollTheDice():
+   return render_template('rollTheDice.html')
+
+@application.route('/rollthedice/flag',methods=['POST'])
+def rollTheDiceFlag():
+   request_data = request.get_json()
+   randomNum=request_data['number']
+   guess=request_data['guess']
+
+   flag="!FLAG!{N0t_so_r4nd0m!!}!FLAG! "
+
+   if randomNum==guess:
+      return {"flag":flag}
+   else:
+      return {"flag":f"incorrect guess again. The number was {randomNum}"}
 
 if __name__ == '__main__':
    website_url='involuntaryCTF:5000'
