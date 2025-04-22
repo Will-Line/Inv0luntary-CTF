@@ -268,7 +268,7 @@ def rollTheDiceFlag():
    randomNum=request_data['number']
    guess=request_data['guess']
 
-   flag="!FLAG!{N0t_so_r4nd0m!!}!FLAG! "
+   flag="!FLAG!{N0t_so_r4nd0m!!}!FLAG!"
 
    if randomNum==guess:
       return {"flag":flag}
