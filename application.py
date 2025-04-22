@@ -95,7 +95,7 @@ def home():
       challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
       userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
 
-   beginCTF=(time.time()>1731047200)   #1751047200
+   beginCTF=(time.time()>1751047200)   #1751047200
 
    return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted)
 
