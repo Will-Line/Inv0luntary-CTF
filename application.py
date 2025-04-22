@@ -11,7 +11,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 def get_secret():
-   secret_name = "rds!db-5420f6d2-147d-4fdf-99ac-f9c4d879f542"
+   secret_name = "rds!db-1c7aa2ab-fe9c-4980-9055-06a0761afac4"
    region_name = "eu-west-2"
 
    # Create a Secrets Manager client
@@ -41,7 +41,7 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 db_name = 'CTF.db'
 
 #application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://admin:{get_secret()}@ctf-database-1.cv64kuysmh9b.eu-west-2.rds.amazonaws.com/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
