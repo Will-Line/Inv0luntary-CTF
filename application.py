@@ -75,6 +75,13 @@ class ChallengesCompleted(db.Model):
    userID = db.Column(db.Integer, primary_key=True)
    challenge1 = db.Column(db.Boolean)
    challenge2 = db.Column(db.Boolean)
+   challenge3 = db.Column(db.Boolean)
+   challenge4 = db.Column(db.Boolean)
+   challenge5 = db.Column(db.Boolean)
+   challenge6 = db.Column(db.Boolean)
+   challenge7 = db.Column(db.Boolean)
+   challenge8 = db.Column(db.Boolean)
+   challenge9 = db.Column(db.Boolean)
 
 with application.app_context():
     db.create_all()
@@ -176,7 +183,7 @@ def signup_post():
 
    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
    new_user = Users(score=0,email=email, name=name, passwords=generate_password_hash(password, method='pbkdf2:sha256'))
-   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0)
+   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0, challenge3=0, challenge4=0, challenge5=0, challenge6=0, challenge7=0, challenge8=0, challenge9=0)
 
    db.session.add(new_user)
    db.session.add(new_challengeCompleted)
