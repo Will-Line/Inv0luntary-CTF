@@ -266,22 +266,23 @@ def changePassword():
 
    return redirect(url_for('/'))
 
-@application.route('/rollthedice')
-def rollTheDice():
-   return render_template('rollTheDice.html')
+if time.time()>1751047200:
+   @application.route('/rollthedice')
+   def rollTheDice():
+      return render_template('rollTheDice.html')
 
-@application.route('/rollthedice/flag',methods=['POST'])
-def rollTheDiceFlag():
-   request_data = request.get_json()
-   randomNum=request_data['number']
-   guess=request_data['guess']
+   @application.route('/rollthedice/flag',methods=['POST'])
+   def rollTheDiceFlag():
+      request_data = request.get_json()
+      randomNum=request_data['number']
+      guess=request_data['guess']
 
-   flag="!FLAG!{N0t_so_r4nd0m!!}!FLAG! "
+      flag="!FLAG!{N0t_so_r4nd0m!!}!FLAG! "
 
-   if randomNum==guess:
-      return {"flag":flag}
-   else:
-      return {"flag":f"incorrect guess again. The number was {randomNum}"}
+      if randomNum==guess:
+         return {"flag":flag}
+      else:
+         return {"flag":f"incorrect guess again. The number was {randomNum}"}
 
 if __name__ == '__main__':
    website_url='involuntaryCTF:5000'
