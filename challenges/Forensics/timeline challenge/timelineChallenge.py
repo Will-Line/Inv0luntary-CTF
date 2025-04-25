@@ -1,4 +1,9 @@
 import socket
+from signal import signal, SIGPIPE, SIG_DFL
+import selectors
+import types
+
+signal(SIGPIPE,SIG_DFL)
 
 IP = "127.0.0.1"
 PORT = 5005
@@ -28,27 +33,80 @@ questionAnswers=[
 "$^^GMw08%fDPK*ga\n"
 ]
 
-while True:
-    sock.listen(0)
-    questionReponseBool=[]
-    client_socket, client_address = sock.accept()
-    client_socket.send("Help! I've gotten my files all confused. Please help me reorganise them and answer my questions. I'll give you a flag if you help me fully. \n".encode("utf-8"))
+userAnswers={}
 
-    for i in range(len(questions)):
-        client_socket.send(questions[i].encode("utf-8"))
-        questionResponse=client_socket.recv(1024)
-        questionResponse=questionResponse.decode("utf-8")
+def accept_wrapper(sock):
+    conn, addr = sock.accept()  # Should be ready to read
+    print(f"Accepted connection from {addr}")
+    conn.setblocking(False)
+    data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"")
+    events = selectors.EVENT_READ | selectors.EVENT_WRITE
+    sel.register(conn, events, data=data)
+    
 
-        if questionResponse==questionAnswers[i]:
-            questionReponseBool.append(True)
+def service_connection(key, mask):
+    sock = key.fileobj
+    data = key.data
+
+    if mask & selectors.EVENT_READ:
+        recv_data = sock.recv(1024)  # Should be ready to read
+        if recv_data:
+            data.outb += recv_data
+            if recv_data.decode("utf-8")==questionAnswers[len(userAnswers[key.data.addr[1]])]:
+                userAnswers[key.data.addr[1]].append(True)
+            else:
+                userAnswers[key.data.addr[1]].append(False)
         else:
-            questionReponseBool.append(False)
+            print(f"Closing connection to {data.addr}")
+            sel.unregister(sock)
+            userAnswers.pop(key.data.addr[1])
+            sock.close()
 
-    if False in questionReponseBool:
-        client_socket.send("You've got something wrong there. Try that again".encode("utf-8"))
-    else:
-        client_socket.send("!FLAG!{G00d_met4data_f0rens1cs}!FLAG!".encode("utf-8"))
-    client_socket.close()
+    if mask & selectors.EVENT_WRITE:
+            try:
+                if key.data.addr[1] not in userAnswers:
+                    userAnswers[key.data.addr[1]] = []
+                    sock.send(questions[len(userAnswers[key.data.addr[1]])].encode("utf-8"))
+                
+                if len(userAnswers[key.data.addr[1]])>=8:
+                    if False in userAnswers[key.data.addr[1]]:
+                        sock.send("You've got something wrong there. Try that again".encode("utf-8"))
+                    else:
+                        sock.send("!FLAG!{G00d_met4data_f0rens1cs}!FLAG!".encode("utf-8"))
+                        
+                    print(f"Closing connection to {data.addr}")
+                    sel.unregister(sock)
+                    userAnswers.pop(key.data.addr[1])
+                    sock.close()
+                else:
+                    if data.outb:
+                        print(f"Echoing {data.outb!r} to {data.addr}")
+                        sent = sock.send(data.outb) 
+                        data.outb = data.outb[sent:]
+                        sock.send(questions[len(userAnswers[key.data.addr[1]])].encode("utf-8"))
+            except:
+                print(f"Closing connection to {data.addr}")
+                userAnswers.pop(key.data.addr[1])  
+
+sel = selectors.DefaultSelector()
+
+sock.listen()
+sock.setblocking(False)
+sel.register(sock, selectors.EVENT_READ, data=None)
+
+try:
+    while True:
+        events = sel.select(timeout=None)
+        for key, mask in events:
+            if key.data is None:
+                accept_wrapper(key.fileobj)
+            else:
+                service_connection(key, mask)
+except KeyboardInterrupt:
+    print("Caught keyboard interrupt, exiting")
+finally:
+    sel.close()
+
 
 
 

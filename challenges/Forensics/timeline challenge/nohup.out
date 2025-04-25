@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/timelineChallenge.py", line 38, in <module>
+    client_socket.send(questions[i].encode("utf-8"))
+BrokenPipeError: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/timelineChallenge.py", line 38, in <module>
+    client_socket.send(questions[i].encode("utf-8"))
+BrokenPipeError: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/timelineChallenge.py", line 38, in <module>
+    client_socket.send(questions[i].encode("utf-8"))
+BrokenPipeError: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Forensics/timeline challenge/timelineChallenge.py", line 38, in <module>
+    client_socket.send(questions[i].encode("utf-8"))
+BrokenPipeError: [Errno 32] Broken pipe

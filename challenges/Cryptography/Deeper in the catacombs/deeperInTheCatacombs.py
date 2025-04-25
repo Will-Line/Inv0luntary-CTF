@@ -2,6 +2,11 @@
 
 import socket
 import random
+import selectors
+import types
+from signal import signal, SIGPIPE, SIG_DFL
+
+signal(SIGPIPE,SIG_DFL)
 
 IP = "127.0.0.1"
 PORT = 5006
@@ -168,9 +173,13 @@ def isMillerRabinPassed(mrc):
     return True
 
 
-if __name__ == '__main__':
-    sock.listen(0)
-    client_socket, client_address = sock.accept()
+def accept_wrapper(sock):
+    conn, addr = sock.accept()  # Should be ready to read
+    print(f"Accepted connection from {addr}")
+    conn.setblocking(False)
+    data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"")
+    events = selectors.EVENT_READ | selectors.EVENT_WRITE
+    sel.register(conn, events, data=data)
 
     p=0
     q=0
@@ -200,34 +209,125 @@ if __name__ == '__main__':
 
         if gcd((p-1)*(q-1),65537)==1:
             coPrime=True
+    
 
-        
-                
-
-    client_socket.send(" - Generating your public / private key-pairs now . . .\n".encode("utf-8"))
-
-    public, private = generate_key_pair(p, q)
-
-    client_socket.send((f" - Your public key is ({public[0]},{public[1]})\n").encode("utf-8"))
-    if private[0]!=None:
-        flag=encrypt(public,"!FLAG!{RSA_n0_problem}!FLAG! ")
-        client_socket.send((f"\n Here's some cryptography I did earlier: {flag}\n").encode("utf-8"))
-        #message = input(" - Enter a message to encrypt with your public key: ")
-        client_socket.send(" - Enter a message to encrypt with your public key: ".encode("utf-8"))
-        message=client_socket.recv(1024).decode("utf-8")
-        encrypted_msg = encrypt(public, message)
-
-        client_socket.send((f" - Your encrypted message is: {encrypted_msg}\n").encode("utf-8"))
-        
-        #cipher_text=int(input("- Enter some cipher text to decrypt with the private key: "))
-        client_socket.send("- Enter some cipher text to decrypt with the private key: ".encode("utf-8"))
-        cipher_text=int(client_socket.recv(1024).decode("utf-8"))
-
-        if cipher_text==flag:
-            client_socket.send("You're not allowed to do that\n".encode("utf-8"))
+    
+def service_connection(key, mask):
+    sock = key.fileobj
+    data = key.data
+    if mask & selectors.EVENT_READ:
+        recv_data = sock.recv(1024)  # Should be ready to read
+        if recv_data:
+            data.outb += recv_data
         else:
-            client_socket.send((f"- Your decrypted cipher text is: {decrypt(private,cipher_text)}\n").encode("utf-8"))
+            print(f"Closing connection to {data.addr}")
+            sel.unregister(sock)
+            sock.close()
+    if mask & selectors.EVENT_WRITE:
+        if data.outb:
+            print(f"Echoing {data.outb!r} to {data.addr}")
+            sent = sock.send(data.outb)  # Should be ready to write
+            data.outb = data.outb[sent:]
 
-    client_socket.send("============================================ END ==========================================================".encode("utf-8"))
 
-    client_socket.close()
+if __name__ == '__main__':
+    sel = selectors.DefaultSelector()
+
+    sock.listen()
+    sock.setblocking(False)
+    sel.register(sock, selectors.EVENT_READ, data=None)
+
+    try:
+        while True:
+            events = sel.select(timeout=None)
+            for key, mask in events:
+                if key.data is None:
+                    accept_wrapper(key.fileobj)
+                else:
+                    service_connection(key, mask)
+    except KeyboardInterrupt:
+        print("Caught keyboard interrupt, exiting")
+    finally:
+        sel.close()
+
+
+    while True:
+        sock.listen(0)
+        client_socket, client_address = sock.accept()
+
+        p=0
+        q=0
+
+        coPrime=False
+
+        while coPrime==False:
+            while True:
+                n = 1024
+                prime_candidate = getLowLevelPrime(n)
+                if not isMillerRabinPassed(prime_candidate):
+                    continue
+                else:
+                    #print(n, "bit prime is: \n", prime_candidate)
+                    p=prime_candidate
+                    break
+
+            while True:
+                n = 1024
+                prime_candidate = getLowLevelPrime(n)
+                if not isMillerRabinPassed(prime_candidate):
+                    continue
+                else:
+                    #print(n, "bit prime is: \n", prime_candidate)
+                    q=prime_candidate
+                    break
+
+            if gcd((p-1)*(q-1),65537)==1:
+                coPrime=True
+
+            #up to here
+                    
+
+        client_socket.send(" - Generating your public / private key-pairs now . . .\n".encode("utf-8"))
+
+        public, private = generate_key_pair(p, q)
+
+        client_socket.send((f" - Your public key is ({public[0]},{public[1]})\n").encode("utf-8"))
+
+        messageRecieved=False
+
+        if private[0]!=None:
+            flag=encrypt(public,"!FLAG!{RSA_n0_problem}!FLAG! ")
+            client_socket.send((f"\n Here's some cryptography I did earlier: {flag}\n").encode("utf-8"))
+
+            message=""
+            while not messageRecieved:
+            #message = input(" - Enter a message to encrypt with your public key: ")
+                client_socket.send(" - Enter a message to encrypt with your public key: ".encode("utf-8"))
+                message=client_socket.recv(1024).decode("utf-8")
+                if message!='':
+                    client_socket.send(" - Enter text".encode("utf-8"))
+                    messageRecieved=True
+
+            encrypted_msg = encrypt(public, message)
+
+            client_socket.send((f" - Your encrypted message is: {encrypted_msg}\n").encode("utf-8"))
+
+            #cipher_text=int(input("- Enter some cipher text to decrypt with the private key: "))
+            messageRecieved=False
+            while not messageRecieved:
+                client_socket.send("- Enter some cipher text to decrypt with the private key: ".encode("utf-8"))
+                cipher_text=client_socket.recv(1024).decode("utf-8")
+                if isinstance(cipher_text, int):
+                    cipher_text=int(cipher_text)
+                    messageRecieved=True
+                else:
+                    client_socket.send(" - Must enter numbers".encode("utf-8"))
+
+            if cipher_text==flag:
+                client_socket.send("You're not allowed to do that\n".encode("utf-8"))
+            else:
+                client_socket.send((f"- Your decrypted cipher text is: {decrypt(private,cipher_text)}\n").encode("utf-8"))
+
+        client_socket.send("============================================ END ==========================================================".encode("utf-8"))
+
+        client_socket.close()
