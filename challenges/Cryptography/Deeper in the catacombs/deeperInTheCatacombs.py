@@ -9,7 +9,7 @@ from signal import signal, SIGPIPE, SIG_DFL
 signal(SIGPIPE,SIG_DFL)
 
 IP = "127.0.0.1"
-PORT = 5006
+PORT = 5005
 
 sock = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_STREAM) # UDP
@@ -172,15 +172,7 @@ def isMillerRabinPassed(mrc):
             return False
     return True
 
-
-def accept_wrapper(sock):
-    conn, addr = sock.accept()  # Should be ready to read
-    print(f"Accepted connection from {addr}")
-    conn.setblocking(False)
-    data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"")
-    events = selectors.EVENT_READ | selectors.EVENT_WRITE
-    sel.register(conn, events, data=data)
-
+def generatepq():
     p=0
     q=0
 
@@ -209,9 +201,19 @@ def accept_wrapper(sock):
 
         if gcd((p-1)*(q-1),65537)==1:
             coPrime=True
-    
+        return p,q
+                        
 
-    
+userData={}
+def accept_wrapper(sock):
+    conn, addr = sock.accept()  # Should be ready to read
+    print(f"Accepted connection from {addr}")
+    conn.setblocking(False)
+    data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"")
+    events = selectors.EVENT_READ | selectors.EVENT_WRITE
+    sel.register(conn, events, data=data)
+
+
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
@@ -219,15 +221,66 @@ def service_connection(key, mask):
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
             data.outb += recv_data
+            if "message" not in userData[key.data.addr[1]]:
+                message=recv_data.decode("utf-8")
+                #encrypted_msg = encrypt(userData[key.data.addr[1]]["public"][0], message)
+                userData[key.data.addr[1]]["message"]=message
+            elif "encrypted_msg" in userData[key.data.addr[1]]:
+                cipher_text=recv_data.decode("utf-8").strip("\n")
+                if str.isdigit(cipher_text):
+                    cipher_text=int(cipher_text)
+                    userData[key.data.addr[1]]["cipher_text"]=cipher_text
+
+
+
         else:
             print(f"Closing connection to {data.addr}")
             sel.unregister(sock)
             sock.close()
     if mask & selectors.EVENT_WRITE:
-        if data.outb:
-            print(f"Echoing {data.outb!r} to {data.addr}")
-            sent = sock.send(data.outb)  # Should be ready to write
-            data.outb = data.outb[sent:]
+        try:
+            if data.outb:
+                print(f"Echoing {data.outb!r} to {data.addr}")
+                sent = sock.send(data.outb)  # Should be ready to write
+                data.outb = data.outb[sent:]
+
+            if key.data.addr[1] not in userData:
+                sock.send(" - Generating your public / private key-pairs now . . .\n".encode("utf-8"))
+                p, q=generatepq()
+                public, private = generate_key_pair(p, q)
+                userData[key.data.addr[1]]={"public" : [public], "private" : [private]}
+                sock.send((f" - Your public key is ({public[0]},{public[1]})\n").encode("utf-8"))
+                
+                flag=encrypt(public,"!FLAG!{RSA_n0_problem}!FLAG! ")
+                userData[key.data.addr[1]]["flag"]=flag
+                sock.send((f"\n Here's some cryptography I did earlier: {flag}\n").encode("utf-8"))
+
+                sock.send(" - Enter a message to encrypt with your public key: ".encode("utf-8"))
+            elif "encrypted_msg" not in userData[key.data.addr[1]] and "message" in userData[key.data.addr[1]]:
+                encrypted_msg = encrypt(userData[key.data.addr[1]]["public"][0], message)
+                userData[key.data.addr[1]]["encrypted_msg"]=encrypted_msg
+                sock.send((f" - Your encrypted message is: {userData[key.data.addr[1]]['encrypted_msg']}\n").encode("utf-8"))
+                sock.send("- Enter some cipher text to decrypt with the private key: ".encode("utf-8"))
+                
+            elif "cipher_text" in userData[key.data.addr[1]] and "decrypted_msg" not in userData[key.data.addr[1]]:
+                decrypted_msg=decrypt(userData[key.data.addr[1]]['private'][0],userData[key.data.addr[1]]['cipher_text'])
+                userData[key.data.addr[1]]['decrypted_msg']=decrypted_msg
+
+                if userData[key.data.addr[1]]['cipher_text']==userData[key.data.addr[1]]['flag']:
+                    sock.send("You're not allowed to do that\n".encode("utf-8"))
+                else:
+                    sock.send((f"- Your decrypted cipher text is: {userData[key.data.addr[1]]['decrypted_msg']}\n").encode("utf-8"))
+            
+            elif "decrypted_msg" in userData[key.data.addr[1]]:
+                print(f"Closing connection to {data.addr}")
+                userData.pop(key.data.addr[1])
+                sel.unregister(sock)
+                sock.close()
+
+        except:
+            print(f"Closing connection to {data.addr}")
+            userData.pop(key.data.addr[1])
+             
 
 
 if __name__ == '__main__':
@@ -249,6 +302,8 @@ if __name__ == '__main__':
         print("Caught keyboard interrupt, exiting")
     finally:
         sel.close()
+
+
 
 
     while True:
