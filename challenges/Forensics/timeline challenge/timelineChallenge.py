@@ -3,7 +3,7 @@ import selectors
 import types
 
 
-IP = "involuntaryctf.net"
+IP = "35.176.229.184"
 PORT = 5005
 
 sock = socket.socket(socket.AF_INET, # Internet
