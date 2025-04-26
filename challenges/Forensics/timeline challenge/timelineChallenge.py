@@ -3,7 +3,7 @@ import selectors
 import types
 
 
-IP = "35.176.229.184"
+IP ="0.0.0.0"
 PORT = 5005
 
 sock = socket.socket(socket.AF_INET, # Internet
