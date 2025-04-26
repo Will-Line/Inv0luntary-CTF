@@ -2,7 +2,6 @@ import socket
 import selectors
 import types
 
-signal(SIGPIPE,SIG_DFL)
 
 IP = "35.176.229.184"
 PORT = 5005

@@ -3,9 +3,8 @@
 import socket
 import random
 import types
-from signal import signal, SIGPIPE, SIG_DFL
+import selectors
 
-signal(SIGPIPE,SIG_DFL)
 
 IP = "35.176.229.184"
 PORT = 5010
