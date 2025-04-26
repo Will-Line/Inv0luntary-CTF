@@ -8,8 +8,8 @@ from signal import signal, SIGPIPE, SIG_DFL
 
 signal(SIGPIPE,SIG_DFL)
 
-IP = "127.0.0.1"
-PORT = 5005
+IP = "35.176.229.184"
+PORT = 5010
 
 sock = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_STREAM) # UDP
