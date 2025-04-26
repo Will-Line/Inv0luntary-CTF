@@ -2,7 +2,6 @@
 
 import socket
 import random
-import selectors
 import types
 from signal import signal, SIGPIPE, SIG_DFL
 

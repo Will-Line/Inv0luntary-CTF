@@ -1,5 +1,4 @@
 import socket
-from signal import signal, SIGPIPE, SIG_DFL
 import selectors
 import types
 
