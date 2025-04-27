@@ -303,7 +303,7 @@ if __name__ == '__main__':
 
 
 
-
+"""
     while True:
         sock.listen(0)
         client_socket, client_address = sock.accept()
@@ -384,3 +384,4 @@ if __name__ == '__main__':
         client_socket.send("============================================ END ==========================================================".encode("utf-8"))
 
         client_socket.close()
+"""
