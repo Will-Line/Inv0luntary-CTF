@@ -2,19 +2,21 @@
 <!doctype html>
 <html lang="en">
 
+
+
 {% block body %}
 
   {{ navBar("leaderboard") }}
 
-  <table class="table mt-5 table-striped table-hover">
-    <thead>
+  <table class="table mt-5 table-striped table-hover table-bordered ">
+    <thead class="leaderboard">
       <tr>
         <th scope="col">Place</th>
         <th scope="col">Username</th>
         <th scope="col">Score</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="leaderboard">
       {% for i in range(usersLength) %}
       <tr>
         <th scope="row">{{ i+1 }}</th>
