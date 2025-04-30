@@ -1,0 +1,59 @@
+body {
+    color: #F0F3F5;
+    background-color: #353B3C;
+}
+
+.btn-primary {
+    background-color: #0092CC;
+    border-color: #0092CC;
+    color: #F0F3F5;
+}
+
+.btn-danger {
+    background-color: #F0544F;
+    color: #F0F3F5;
+    border-color: #F0544F;
+}
+
+.navbar-colour {
+    background-color: #262B2B;
+    color: #F0F3F5;
+    --bs-emphasis-color-rgb: E7, EB, EF;
+}
+
+.leaderboard {
+    background-color: #353B3C !important;
+    color: #353B3C !important;
+    --bs-body-bg: #262B2B !important;
+    --bs-table-bg: #262B2B;
+    --bs-table-striped-bg: #353B3C; 
+
+    --bs-table-color: #F0F3F5;
+    --bs-table-striped-color: #F0F3F5; 
+    --bs-table-active-color: #CED6DE;
+    --bs-table-hover-color: #eef3f7;
+
+    --bs-emphasis-color: #F0F3F5;
+
+    --bs-emphasis-color-rgb: 255,255,255;
+    --bs-table-hover-bg: #0092CC;
+
+}
+
+.modal {
+    color: #262B2B;
+}
+
+.account-colour {
+    color: #F0F3F5;
+    background-color: #353B3C;
+}
+
+.btn-danger {
+    background-color: #EF4943;
+}
+
+a {
+    color: rgb(102 149 219);
+    text-decoration: underline;
+}
