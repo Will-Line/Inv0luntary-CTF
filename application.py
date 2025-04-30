@@ -285,7 +285,7 @@ if time.time()>1751047200:
 
 
 if __name__ == '__main__':
-   website_url='involuntaryCTF:5000'
+   website_url='involuntaryCTF.net:5000'
    application.config['SERVER_NAME']=website_url
    application.run(debug=True)
 
