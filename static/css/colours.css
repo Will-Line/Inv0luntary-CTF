@@ -4,7 +4,7 @@ body {
 }
 
 .btn-primary {
-    background-color: #0092CC;
+    background-color: #0092cc;
     border-color: #0092CC;
     color: #F0F3F5;
 }
@@ -25,7 +25,7 @@ body {
     background-color: #353B3C !important;
     color: #353B3C !important;
     --bs-body-bg: #262B2B !important;
-    --bs-table-bg: #262B2B;
+    --bs-table-bg: #2d3232;
     --bs-table-striped-bg: #353B3C; 
 
     --bs-table-color: #F0F3F5;
