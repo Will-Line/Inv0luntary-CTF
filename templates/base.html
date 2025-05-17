@@ -75,7 +75,8 @@
     </div>
   </nav>
 
-  <div class="offcanvas offcanvas-end account-colour" tabindex="-1" id="accountOffCanvas" aria-labelledby="accountOffCanvasLabel">
+  <div class="offcanvas offcanvas-end account-colour" tabindex="-1" id="accountOffCanvas"
+    aria-labelledby="accountOffCanvasLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="accountOffCanvasLabel">{{current_user.name}}</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -139,8 +140,6 @@
               <input type="checkbox" onclick="togglePassword('password')"> Show password
             </p>
 
-            {{ flashMessages() }}
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
@@ -154,9 +153,9 @@
   <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="changePasswordModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form method="POST" class="form-signin mt-3" action="/reset-password">
+        <form method="POST" class="form-signin mt-3" action="/reset-password" onSubmit="return checkPassword(this)">
           <div class="modal-body">
-            Enter the new email and your password.<br><br>
+            Enter the new password and your current password.<br><br>
 
             <label for="currentPassword" class="sr-only">Current password</label>
             <input type="password" name="currentPassword" id="currentPassword" class="form-control" placeholder=""
@@ -170,9 +169,9 @@
             <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder=""
               required="">
 
-
-            {{ flashMessages() }}
-
+            <p id="errorMessage" name="errorMessage" style="color: rgb(232, 27, 27);">
+              
+            </p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
@@ -224,6 +223,39 @@
     }
   </script>
 
+
+  <script>
+
+    // Function to check Whethepassword2 = form.confirm{r both passwords
+    // is same or not.
+    function checkPassword(form) {
+      password1 = form.newPassword.value;
+      password2 = form.confirmPassword.value;
+
+      // If password not entered
+      if (password1 == '')
+        document.getElementById("errorMessage").innerHTML="Enter a password";
+        
+
+      // If confirm password not entered
+      else if (password2 == '')
+        document.getElementById("errorMessage").innerHTML="Enter the confirm password";
+        
+
+      // If Not same return False.    
+      else if (password1 != password2) {
+        document.getElementById("errorMessage").innerHTML="Passwords do not match";
+        return false;
+      }
+
+      // If same return True.
+      else {
+        return true;
+      }
+
+      return false;
+    }
+  </script>
   {% block body %}
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
