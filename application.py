@@ -1,14 +1,19 @@
 #Remember you have deprecated to Flask 2.3.3
 
-from flask import Flask, redirect, url_for, request, render_template, jsonify, flash, send_file, Blueprint
+from flask import Flask, redirect, url_for, request, render_template, jsonify, flash, send_file, Blueprint, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from sqlalchemy import Integer, String, select
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
+from flask_mailman import EmailMessage, Mail
 import time
 import boto3
 from botocore.exceptions import ClientError
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Email
 
 def get_secret():
    secret_name = "rds!db-5420f6d2-147d-4fdf-99ac-f9c4d879f542"
@@ -38,6 +43,21 @@ db = SQLAlchemy()
 application = Flask(__name__)
 application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
+application.config.update(dict(
+    DEBUG = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 587,
+    MAIL_USE_TLS = True,
+    MAIL_USE_SSL = False,
+    MAIL_USERNAME = 'william.h.line@gmail.com',
+    MAIL_PASSWORD = 'qeez guej mver hvth',
+))
+
+application.config["RESET_PASS_TOKEN_MAX_AGE"]=600
+
+mail = Mail()
+mail.init_app(application)
+
 db_name = 'CTF.db'
 
 application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
@@ -58,11 +78,38 @@ def load_user(user_id):
    return Users.query.get(int(user_id))
 
 class Users(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40), unique=True,nullable=False)
-    score = db.Column(db.Integer, unique=False, nullable=False)
-    email = db.Column(db.String(40), unique=True, nullable=False)
-    passwords = db.Column(db.String(60), unique=False, nullable=False)
+   id = db.Column(db.Integer, primary_key=True)
+   name = db.Column(db.String(40), unique=True,nullable=False)
+   score = db.Column(db.Integer, unique=False, nullable=False)
+   email = db.Column(db.String(40), unique=True, nullable=False)
+   passwords = db.Column(db.String(60), unique=False, nullable=False)
+
+   def generate_reset_password_token(self):
+      serializer = URLSafeTimedSerializer(application.config["SECRET_KEY"])
+
+      return serializer.dumps(self.email, salt=self.passwords)
+
+   @staticmethod
+   def validate_reset_password_token(token: str, user_id: int):
+      user = db.session.get(Users, user_id)
+
+      if user is None:
+            return None
+
+      serializer = URLSafeTimedSerializer(application.config["SECRET_KEY"])
+      try:
+            token_user_email = serializer.loads(
+               token,
+               max_age=application.config["RESET_PASS_TOKEN_MAX_AGE"],
+               salt=user.passwords,
+            )
+      except (BadSignature, SignatureExpired):
+            return None
+
+      if token_user_email != user.email:
+            return None
+
+      return user
 
 class Challenges(db.Model):
    challengeID = db.Column(db.Integer, primary_key=True)
@@ -263,8 +310,96 @@ def changePassword():
    query=text(f"UPDATE users SET passwords='{hashedNewPassword}' WHERE id={current_user.id};")
    db.session.execute(query)
    db.session.commit()
+   flash('Password changed')
 
-   return redirect(url_for('/'))
+   return redirect('/')
+
+
+
+def send_reset_password_email(user):
+    reset_password_url = url_for(
+        "forgotPasswordReset",
+        token=user.generate_reset_password_token(),
+        user_id=user.id,
+        _external=True,
+    )
+
+    email_body = render_template(
+        'reset_password_email_content.html', reset_password_url=reset_password_url
+    )
+
+    message = EmailMessage(
+        subject="Reset your password",
+        body=email_body,
+        to=[user.email],
+    )
+    message.content_subtype = "html"
+
+    message.send()
+
+
+@application.route('/forgot-password')
+def forgotPassword():
+   return render_template('forgot-password.html')
+
+@application.route('/forgot-password', methods=['POST'])
+def forgotPasswordPost():
+   if current_user.is_authenticated:
+     return redirect('/')
+   
+   formEmail=request.form.get('email')
+
+   user = Users.query.filter_by(email=formEmail).first()
+
+   if user:
+      send_reset_password_email(user)
+
+   flash(
+      "Instructions to reset your password were sent to your email address,"
+      " if it exists in our system."
+   )
+
+   return redirect('/forgot-password')
+
+@application.route("/reset_password/<token>/<int:user_id>")
+def forgotPasswordReset(token, user_id):
+   if current_user.is_authenticated:
+         return redirect('/')
+
+   user = Users.validate_reset_password_token(token, user_id)
+   if not user:
+      return render_template("reset-password.html", error=True)   
+
+   return render_template('reset-password.html', error=False)
+
+@application.route("/reset_password/<token>/<int:user_id>",methods=['POST'])
+def forgotPasswordResetPost(token, user_id):
+   if current_user.is_authenticated:
+         return redirect('/')
+
+   user = Users.validate_reset_password_token(token, user_id)
+   if not user:
+      return render_template("reset-password.html", error=True)   
+
+   currentPassword = request.form.get('currentPassword')
+   newPassword= request.form.get('newPassword')
+
+   hashedNewPassword=generate_password_hash(newPassword, method='pbkdf2:sha256')
+
+    # check if the user actually exists
+    # take the user-supplied password, hash it, and compare it to the hashed password in the database
+   if user.passwords==hashedNewPassword:
+      flash('Can\'t have the same password')
+      return redirect(f'/reset_password/{token}/{user_id}')
+
+   query=text(f"UPDATE users SET passwords='{hashedNewPassword}' WHERE id={user.id};")
+   db.session.execute(query)
+   db.session.commit()
+   
+   return redirect('/login')
+
+
+
 
 if time.time()>1751047200:
    @application.route('/rollthedice')
