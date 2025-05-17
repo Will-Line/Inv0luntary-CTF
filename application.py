@@ -11,9 +11,6 @@ import time
 import boto3
 from botocore.exceptions import ClientError
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, Email
 
 def get_secret():
    secret_name = "rds!db-5420f6d2-147d-4fdf-99ac-f9c4d879f542"
@@ -139,20 +136,23 @@ def home():
    challengesList=[]
    taskTypesList=["misc", "web exploitation", "forensics", "reversing", "cryptography"]
    
-   for i in range(5):
-      challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
-      challengesList.append(db.session.execute(challengesQueryText).mappings().all())
+   beginCTF=(time.time()>1751047200)   #1751047200
 
-   if current_user.is_anonymous:
-      userChallengesCompleted=[]
-   else:      
-      challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
-      userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
+   if beginCTF:
+      for i in range(5):
+         challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
+         challengesList.append(db.session.execute(challengesQueryText).mappings().all())
 
-   beginCTF=(time.time()>1731047200)   #1751047200
+      if current_user.is_anonymous:
+         userChallengesCompleted=[]
+      else:      
+         challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
+         userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
+      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted)
 
-   return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted)
-
+   else:
+      return render_template('index.html', beginCTF=beginCTF)
+   
 @application.route('/',methods={"POST"})
 def flagSubmit():
    flagText=request.form.get('flag')
