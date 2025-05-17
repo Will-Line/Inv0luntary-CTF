@@ -13,7 +13,7 @@ from botocore.exceptions import ClientError
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 
 def get_secret():
-   secret_name = "rds!db-5420f6d2-147d-4fdf-99ac-f9c4d879f542"
+   secret_name = "rds!db-1c7aa2ab-fe9c-4980-9055-06a0761afac4"
    region_name = "eu-west-2"
 
    # Create a Secrets Manager client
