@@ -60,8 +60,7 @@ mail.init_app(application)
 
 db_name = 'CTF.db'
 
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/flask'
-#application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://involuntary:{get_secret()}@ctf-database.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
+application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://admin:{get_secret()}@ctf-database-1.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -420,4 +419,4 @@ if time.time()>1751047200:
 if __name__ == '__main__':
    website_url='involuntaryCTF:5000'
    application.config['SERVER_NAME']=website_url
-   application.run(debug=True)
+   application.run(debug=False)
