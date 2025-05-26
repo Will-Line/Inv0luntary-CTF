@@ -75,7 +75,8 @@
 
   <div class="col">
     <form method="POST">
-      <input style="color: #1a1b1c;" type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag" aria-label="Flag">
+      <input style="color: #1a1b1c;" type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag"
+        aria-label="Flag">
     </form>
   </div>
   <div class="dropdown col">
@@ -128,7 +129,7 @@
   Help! I've gotten my files all confused. Please help me reorganise them and answer my questions. I'll give you a flag
   if you help me fully.
   <br>
-  <code>nc ec2-user@ec2-35-176-229-184.eu-west-2.compute.amazonaws.com 5005</code>
+  <code>nc involuntaryctf.net 5005</code>
 </p>
 
 <a href="/downloadTimeline">files</a>
@@ -156,7 +157,7 @@
   I've made some code to decrypt anything you want. Well almost everything.
   <br>
   <br>
-  <code>nc ec2-user@ec2-35-176-229-184.eu-west-2.compute.amazonaws.com 5006</code>
+  <code>nc involuntaryctf.net 5006</code>
 </p>
 {% endcall %}
 
@@ -203,18 +204,28 @@
 
 {% call taskModal(9,'Lottery',250, challengesCompleted[1][9]) %}
 <p>
-  I've made a lottery but you'll never win it. Your chance is 1 in 10^19 which is equivalent to rolling a d10 19 times and getting the same thing.
+  I've made a lottery but you'll never win it. Your chance is 1 in 10^19 which is equivalent to rolling a d10 19 times
+  and getting the same thing.
   <br>
   <br>
 
   <a href="/rollthedice">Lottery</a>
 </p>
 {% endcall %}
+
+{% call taskModal(10,'In good form',300, challengesCompleted[1][10]) %}
+<p>
+  Here's my login for admins connect to it below.
+  <br>
+  <br>
+  <a href="/downloadInGoodForm">source code</a>
+  <br>
+  <br>
+  <code>nc involuntaryctf.net 1299</code>
+
+</p>
+{% endcall %}
 {% endif %}
 
 {{super()}}
 {% endblock %}
-
-
-
-

@@ -266,6 +266,13 @@ def downloadBasicPython():
     #path='/'
     return send_file(path, as_attachment=True)
 
+@application.route('/downloadInGoodForm')
+@login_required
+def downloadInGoodForm():
+   path='challenges/Reverse engineering/In good form/GoodForm.c'
+   return send_file(path, as_attachment=True)
+
+
 @application.route('/reset-email', methods=['POST'])
 @login_required
 def changeEmail():
