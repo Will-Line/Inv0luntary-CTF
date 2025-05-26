@@ -128,7 +128,7 @@
   Help! I've gotten my files all confused. Please help me reorganise them and answer my questions. I'll give you a flag
   if you help me fully.
   <br>
-  <code>nc ec2-user@ec2-35-176-229-184.eu-west-2.compute.amazonaws.com 5005</code>
+  <code>nc involuntaryctf.net 5005</code>
 </p>
 
 <a href="/downloadTimeline">files</a>
@@ -156,7 +156,7 @@
   I've made some code to decrypt anything you want. Well almost everything.
   <br>
   <br>
-  <code>nc ec2-user@ec2-35-176-229-184.eu-west-2.compute.amazonaws.com 5006</code>
+  <code>nc involuntaryctf.net 5006</code>
 </p>
 {% endcall %}
 
@@ -210,6 +210,20 @@
   <a href="/rollthedice">Lottery</a>
 </p>
 {% endcall %}
+
+{% call taskModal(10,'In good form',300, challengesCompleted[1][10]) %}
+<p>
+  Here's my login for admins connect to it below.
+  <br>
+  <br>
+  <a href="/downloadInGoodForm">source code</a>
+  <br>
+  <br>
+  <code>nc involuntaryctf.net 1299</code>
+
+</p>
+{% endcall %}
+
 {% endif %}
 
 {{super()}}
