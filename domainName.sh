@@ -7,5 +7,4 @@ sleep 5
 snap install core
 snap install --classic certbot
 ln -s /snap/bin/certbot /usr/bin/certbot
-certbot --nginx
-echo "hi"
+printf '\ninvoluntaryctf.net\n' | certbot --nginx
