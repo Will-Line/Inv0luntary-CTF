@@ -42,12 +42,12 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
 application.config.update(dict(
     DEBUG = True,
-    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_SERVER = 'smtp.protonmail.ch',
     MAIL_PORT = 587,
     MAIL_USE_TLS = True,
     MAIL_USE_SSL = False,
-    MAIL_USERNAME = 'william.h.line@gmail.com',
-    MAIL_PASSWORD = 'qeez guej mver hvth',
+    MAIL_USERNAME = 'noreply@involuntaryctf.net',
+    MAIL_PASSWORD = 'XDKJH4VMPRBYXGXP',
 ))
 
 application.config["RESET_PASS_TOKEN_MAX_AGE"]=600
