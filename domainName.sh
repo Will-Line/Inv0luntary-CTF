@@ -14,3 +14,6 @@ printf "\n"
 printf "Y"
 printf "involuntaryctf.net"
 echo domain name set up
+
+
+
