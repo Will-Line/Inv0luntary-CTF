@@ -244,32 +244,33 @@ def logout():
    logout_user()
    return redirect('/')
 
-@application.route('/downloadTimeline')
-@login_required
-def downloadTimeline():
-    path='challenges/Forensics/timeline challenge/files.zip'
-    #path='/'
-    return send_file(path, as_attachment=True)
+if time.time()>1751047200:
+   @application.route('/downloadTimeline')
+   @login_required
+   def downloadTimeline():
+      path='challenges/Forensics/timeline challenge/files.zip'
+      #path='/'
+      return send_file(path, as_attachment=True)
 
-@application.route('/downloadFlagDoesntBite')
-@login_required
-def downloadFlagDoesntBite():
-    path='challenges/Reverse engineering/basic assembly/a.out'
-    #path='/'
-    return send_file(path, as_attachment=True)
+   @application.route('/downloadFlagDoesntBite')
+   @login_required
+   def downloadFlagDoesntBite():
+      path='challenges/Reverse engineering/basic assembly/a.out'
+      #path='/'
+      return send_file(path, as_attachment=True)
 
-@application.route('/downloadBasicPython')
-@login_required
-def downloadBasicPython():
-    path='challenges/Reverse engineering/Basic python/basicPython.py'
-    #path='/'
-    return send_file(path, as_attachment=True)
+   @application.route('/downloadBasicPython')
+   @login_required
+   def downloadBasicPython():
+      path='challenges/Reverse engineering/Basic python/basicPython.py'
+      #path='/'
+      return send_file(path, as_attachment=True)
 
-@application.route('/downloadInGoodForm')
-@login_required
-def downloadInGoodForm():
-   path='challenges/Reverse engineering/In good form/GoodForm.c'
-   return send_file(path, as_attachment=True)
+   @application.route('/downloadInGoodForm')
+   @login_required
+   def downloadInGoodForm():
+      path='challenges/Reverse engineering/In good form/GoodForm.c'
+      return send_file(path, as_attachment=True)
 
 
 @application.route('/reset-email', methods=['POST'])
