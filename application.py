@@ -42,12 +42,13 @@ application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
 
 application.config.update(dict(
     DEBUG = True,
-    MAIL_SERVER = 'smtp.protonmail.ch',
-    MAIL_PORT = 587,
-    MAIL_USE_TLS = True,
-    MAIL_USE_SSL = False,
-    MAIL_USERNAME = 'noreply@involuntaryctf.net',
-    MAIL_PASSWORD = 'XDKJH4VMPRBYXGXP',
+    MAIL_SERVER = 'email-smtp.eu-west-2.amazonaws.com',
+    MAIL_PORT = 465,
+    MAIL_USE_TLS = False,
+    MAIL_USE_SSL = True,
+    MAIL_USERNAME = 'AKIAZB2ULO6MVKB56G6M',
+    MAIL_PASSWORD = 'BAsM1HZc4wtr337hMZTmhnXHYe77Bev71kPlCwKQqu+I',
+    MAIL_DEFAULT_SENDER = 'noreply@involuntaryctf.net',
 ))
 
 application.config["RESET_PASS_TOKEN_MAX_AGE"]=600
