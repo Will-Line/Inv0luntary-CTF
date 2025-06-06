@@ -29,7 +29,7 @@
 
 {{ navBar("home") }}
 
-{% if current_user.is_anonymous or not beginCTF %}
+{% if current_user.is_anonymous or not beginCTF and not admin %}
 <h1 class="m-5">Challenge begins in:</h1>
 <h1 class="m-5 display-5" id="countdown"></h1>
 

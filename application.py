@@ -139,7 +139,11 @@ def home():
    
    beginCTF=(time.time()>1751047200)   #1751047200
 
-   if beginCTF:
+   if not current_user.is_anonymous:
+      if current_user.name=="involuntary":
+         admin=True
+
+   if beginCTF or admin:
       for i in range(5):
          challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
          challengesList.append(db.session.execute(challengesQueryText).mappings().all())
@@ -149,10 +153,10 @@ def home():
       else:      
          challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
          userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
-      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted)
+      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin)
 
    else:
-      return render_template('index.html', beginCTF=beginCTF)
+      return render_template('index.html', beginCTF=beginCTF, admin=admin)
    
 @application.route('/',methods={"POST"})
 def flagSubmit():
