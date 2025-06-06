@@ -139,6 +139,8 @@ def home():
    
    beginCTF=(time.time()>1751047200)   #1751047200
 
+   admin=False
+
    if not current_user.is_anonymous:
       if current_user.name=="involuntary":
          admin=True
