@@ -192,7 +192,7 @@ def howToPlay():
 
 @application.route('/leaderboard')
 def leaderboard():
-   userQueryText=text("SELECT name,score FROM users WHERE name!=involuntary")
+   userQueryText=text("SELECT name,score FROM users WHERE name!='involuntary'")
 
    usersAndScores=db.session.execute(userQueryText).mappings().all()
    usersAndScores = sorted(usersAndScores, key=lambda d: d['score'], reverse=True)
