@@ -98,15 +98,15 @@
 
     <div class="col">
       <h4>{{ taskTypesList[i] }}</h4>
-
+      
       {% for j in range(challenges[i]|length) %}
       {% if challengesCompleted[challenges[i][j].challengeID][1] %}
-      <button type="button" class="btn btn-primary mt-3 opacity-50" data-bs-toggle="modal"
+      <button type="button" class="btn btn-primary me-3 mt-3 opacity-50" data-bs-toggle="modal"
         data-bs-target="#{{challenges[i][j].challengeID}}">
         <p>{{ challenges[i][j].challengeName }}<br>Score: {{ challenges[i][j].scoreVal }}</p>
       </button>
       {% else %}
-      <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+      <button type="button" class="btn btn-primary me-3 mt-3" data-bs-toggle="modal"
         data-bs-target="#{{challenges[i][j].challengeID}}">
         <p>{{ challenges[i][j].challengeName }}<br>Score: {{ challenges[i][j].scoreVal }}</p>
       </button>
