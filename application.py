@@ -160,31 +160,32 @@ def home():
 
    else:
       return render_template('index.html', beginCTF=beginCTF, admin=admin)
-   
-@application.route('/',methods={"POST"})
-def flagSubmit():
-   flagText=request.form.get('flag')
-   flag=Challenges.query.filter_by(flagText=flagText).first()
 
-   challengesCompleted=False
-   if flag:
-      selectText=text(f"SELECT challenge{flag.challengeID} FROM challenges_completed WHERE userID={current_user.id}")
-      challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
+if time.time()>1751047200 and time.time<1751216400 or current_user.name=='involuntary':
+   @application.route('/',methods={"POST"})
+   def flagSubmit():
+      flagText=request.form.get('flag')
+      flag=Challenges.query.filter_by(flagText=flagText).first()
 
-   if not flag:
-      flash("That's not a valid flag. Try again.")
+      challengesCompleted=False
+      if flag:
+         selectText=text(f"SELECT challenge{flag.challengeID} FROM challenges_completed WHERE userID={current_user.id}")
+         challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
+
+      if not flag:
+         flash("That's not a valid flag. Try again.")
+         return redirect(url_for('home'))
+      elif challengesCompleted:
+         flash("You've submitted that flag before")
+         return redirect(url_for('home'))
+      else:
+         updateChallengeComplete=text(f"UPDATE challenges_completed SET challenge{flag.challengeID}=1 WHERE userID={current_user.id}")
+         db.session.execute(updateChallengeComplete)
+         current_user.score+=flag.scoreVal
+         flash("Congratulations on a correct flag")
+         db.session.commit()
+
       return redirect(url_for('home'))
-   elif challengesCompleted:
-      flash("You've submitted that flag before")
-      return redirect(url_for('home'))
-   else:
-      updateChallengeComplete=text(f"UPDATE challenges_completed SET challenge{flag.challengeID}=1 WHERE userID={current_user.id}")
-      db.session.execute(updateChallengeComplete)
-      current_user.score+=flag.scoreVal
-      flash("Congratulations on a correct flag")
-      db.session.commit()
-
-   return redirect(url_for('home'))
 
 @application.route('/how-to-play')
 def howToPlay():
