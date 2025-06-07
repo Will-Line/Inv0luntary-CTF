@@ -192,7 +192,7 @@ def howToPlay():
 
 @application.route('/leaderboard')
 def leaderboard():
-   userQueryText=text("SELECT name,score FROM users")
+   userQueryText=text("SELECT name,score FROM users WHERE name!=involuntary")
 
    usersAndScores=db.session.execute(userQueryText).mappings().all()
    usersAndScores = sorted(usersAndScores, key=lambda d: d['score'], reverse=True)
@@ -200,7 +200,10 @@ def leaderboard():
 
 @application.route('/login')
 def login():
-   return render_template('login.html')
+   if not current_user.is_anonymous:
+      return redirect('/')
+   else:
+      return render_template('login.html')
 
 @application.route('/login', methods={'POST'})
 def login_post():
@@ -221,7 +224,10 @@ def login_post():
 
 @application.route('/signup')
 def signup():
-   return render_template('signup.html')
+   if not current_user.is_anonymous:
+      return redirect('/')
+   else:
+      return render_template('signup.html')
 
 @application.route('/signup', methods=['POST'])
 def signup_post():
