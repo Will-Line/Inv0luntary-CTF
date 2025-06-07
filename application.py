@@ -58,6 +58,7 @@ mail.init_app(application)
 
 db_name = 'CTF.db'
 
+#Database connection
 application.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://admin:{get_secret()}@ctf-database-1.cv64kuysmh9b.eu-west-2.rds.amazonaws.com:3306/CTF'
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
