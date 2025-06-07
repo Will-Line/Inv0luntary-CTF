@@ -161,9 +161,10 @@ def home():
    else:
       return render_template('index.html', beginCTF=beginCTF, admin=admin)
 
-if time.time()>1751047200 and time.time<1751216400 or current_user.name=='involuntary':
-   @application.route('/',methods={"POST"})
-   def flagSubmit():
+
+@application.route('/',methods={"POST"})
+def flagSubmit():
+   if time.time()>1751047200 and time.time<1751216400 or current_user.name=='involuntary':
       flagText=request.form.get('flag')
       flag=Challenges.query.filter_by(flagText=flagText).first()
 
@@ -184,7 +185,8 @@ if time.time()>1751047200 and time.time<1751216400 or current_user.name=='involu
          current_user.score+=flag.scoreVal
          flash("Congratulations on a correct flag")
          db.session.commit()
-
+      return redirect(url_for('home'))
+   else:
       return redirect(url_for('home'))
 
 @application.route('/how-to-play')
