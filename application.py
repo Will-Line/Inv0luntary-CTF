@@ -172,16 +172,16 @@ def flagSubmit():
       challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
 
    if not flag:
-      flash("That's not a valid flag. Try again.")
+      flash("That's not a valid flag. Try again.","flag")
       return redirect(url_for('home'))
    elif challengesCompleted:
-      flash("You've submitted that flag before")
+      flash("You've submitted that flag before","flag")
       return redirect(url_for('home'))
    else:
       updateChallengeComplete=text(f"UPDATE challenges_completed SET challenge{flag.challengeID}=1 WHERE userID={current_user.id}")
       db.session.execute(updateChallengeComplete)
       current_user.score+=flag.scoreVal
-      flash("Congratulations on a correct flag")
+      flash("Congratulations on a correct flag","flag")
       db.session.commit()
 
    return redirect(url_for('home'))
