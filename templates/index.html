@@ -78,6 +78,7 @@
       <input style="color: #1a1b1c;" type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag"
         aria-label="Flag">
     </form>
+    <p>
     {% with messages=get_flashed_messages(category_filter=["flag"]) %}
     {% if messages %}
 
@@ -87,8 +88,6 @@
 
     {% endif %}
     {% endwith %}
-    <p>
-
     </p>
   </div>
   <div class="dropdown col">
