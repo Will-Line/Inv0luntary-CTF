@@ -66,9 +66,7 @@
 {% else %}
 
 <div class="row mt-3">
-  <div>
-    {{ flashMessages() }}
-  </div>
+
   <div class="col">
     <p class="p-2" style="font-size: large;">Score: {{ current_user.score }}</p>
   </div>
@@ -78,6 +76,10 @@
       <input style="color: #1a1b1c;" type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag"
         aria-label="Flag">
     </form>
+
+
+    {{ flashMessages("flag") }}
+
   </div>
   <div class="dropdown col">
     <!--<button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
@@ -98,7 +100,7 @@
 
     <div class="col">
       <h4>{{ taskTypesList[i] }}</h4>
-      
+
       {% for j in range(challenges[i]|length) %}
       {% if challengesCompleted[challenges[i][j].challengeID][1] %}
       <button type="button" class="btn btn-primary me-3 mt-3 opacity-50" data-bs-toggle="modal"

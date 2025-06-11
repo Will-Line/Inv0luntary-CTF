@@ -184,16 +184,18 @@
   </div>
   {%- endmacro %}
 
-  {% macro flashMessages() -%}
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <ul class=flashes>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  {% endwith %}
+  {% macro flashMessages(category) -%}
+    <p>
+      {% with messages=get_flashed_messages(category_filter=[category]) %}
+      {% if messages %}
+
+      {%- for msg in messages %}
+      {{ msg }}
+      {% endfor -%}
+
+      {% endif %}
+      {% endwith %}
+    </p>
   {%- endmacro %}
 
   {% macro privacyPolicy() -%}

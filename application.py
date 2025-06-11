@@ -216,7 +216,7 @@ def login_post():
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if not user or not check_password_hash(user.passwords, password):
-        flash('Please check your login details and try again.')
+        flash('Please check your login details and try again.',"login")
         return redirect(url_for('login')) # if the user doesn't exist or password is wrong, reload the page
 
    login_user(user, remember=remember)
@@ -239,7 +239,7 @@ def signup_post():
    user = Users.query.filter_by(email=email).first() or Users.query.filter_by(name=name).first() # if this returns a user, then the email already exists in database
 
    if user: # if a user is found, we want to redirect back to signup page so user can try again
-      flash("User already exists. Pick a new username/email.")
+      flash("User already exists. Pick a new username/email.","signup")
       return redirect(url_for('signup'))
 
    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
@@ -298,11 +298,11 @@ def changeEmail():
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if not user or not check_password_hash(user.passwords, password):
-        flash('Incorrect password')
+        flash('Incorrect password',"changeEmail")
         return redirect('/') # if the user doesn't exist or password is wrong, reload the page
 
    if current_user.email==email:
-      flash('Must be a new email')
+      flash('Must be a new email',"changeEmail")
       return redirect('/')
 
    query=text(f"UPDATE users SET email='{email}' WHERE id={current_user.id};")
@@ -322,16 +322,16 @@ def changePassword():
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if not user or not check_password_hash(user.passwords, currentPassword):
-      flash('Incorrect password')
+      flash('Incorrect password',"changePassword")
       return redirect('/') # if the user doesn't exist or password is wrong, reload the page
    elif current_user.passwords==hashedNewPassword:
-      flash('Can\'t have the same password')
+      flash('Can\'t have the same password', "changePassword")
       return redirect('/')
 
    query=text(f"UPDATE users SET passwords='{hashedNewPassword}' WHERE id={current_user.id};")
    db.session.execute(query)
    db.session.commit()
-   flash('Password changed')
+   flash('Password changed',"changePassword")
 
    return redirect('/')
 
@@ -377,7 +377,7 @@ def forgotPasswordPost():
 
    flash(
       "Instructions to reset your password were sent to your email address,"
-      " if it exists in our system."
+      " if it exists in our system.","forgotPassword"
    )
 
    return redirect('/forgot-password')
@@ -410,7 +410,7 @@ def forgotPasswordResetPost(token, user_id):
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if user.passwords==hashedNewPassword:
-      flash('Can\'t have the same password')
+      flash('Can\'t have the same password',"resetPassword")
       return redirect(f'/reset_password/{token}/{user_id}')
 
    query=text(f"UPDATE users SET passwords='{hashedNewPassword}' WHERE id={user.id};")
