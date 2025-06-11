@@ -75,10 +75,24 @@
 
   <div class="col">
     <form method="POST">
-      <input style="color: #1a1b1c;" type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag" aria-label="Flag">
+      <input style="color: #1a1b1c;" type="text" name="flag" id="flag" class="form-control p-2" placeholder="Enter flag"
+        aria-label="Flag">
     </form>
+    {% with messages=get_flashed_messages(category_filter=["flag"]) %}
+    {% if messages %}
+
+    {%- for msg in errors %}
+    {{ msg }}
+    {% endfor -%}
+
+    {% endif %}
+    {% endwith %}
+    <p>
+
+    </p>
   </div>
   <div class="dropdown col">
+
     <!--<button class="btn btn-secondary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown"
     aria-expanded="false">
     Filter
@@ -203,7 +217,8 @@
 
 {% call taskModal(9,'Lottery',250, challengesCompleted[1][9]) %}
 <p>
-  I've made a lottery but you'll never win it. Your chance is 1 in 10^19 which is equivalent to rolling a d10 19 times and getting the same thing.
+  I've made a lottery but you'll never win it. Your chance is 1 in 10^19 which is equivalent to rolling a d10 19 times
+  and getting the same thing.
   <br>
   <br>
 
