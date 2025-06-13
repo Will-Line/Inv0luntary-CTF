@@ -427,7 +427,7 @@ def forgotPasswordResetPost(token, user_id):
    return redirect('/login')
 
 
-if time.time()>CTFstartTime and time.time()<CTFfinishTime:
+if time.time()>CTFstartTime and time.time()<CTFfinishTime:  #only run during CTF
    @application.route('/rollthedice')
    def rollTheDice():
       return render_template('rollTheDice.html')
