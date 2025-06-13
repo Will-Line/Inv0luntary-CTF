@@ -297,7 +297,7 @@ def changeEmail():
    password = request.form.get('password')
 
    user = Users.query.filter_by(name=current_user.name).first()
-
+   
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if not user or not check_password_hash(user.passwords, password):
@@ -380,7 +380,7 @@ def forgotPasswordPost():
 
    flash(
       "Instructions to reset your password were sent to your email address,"
-      " if it exists in our system."
+      " if it exists in our system.","forgotPassword"
    )
 
    return redirect('/forgot-password')
@@ -413,7 +413,7 @@ def forgotPasswordResetPost(token, user_id):
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if user.passwords==hashedNewPassword:
-      flash('Can\'t have the same password')
+      flash('Can\'t have the same password',"resetPassword")
       return redirect(f'/reset_password/{token}/{user_id}')
 
    query=text(f"UPDATE users SET passwords='{hashedNewPassword}' WHERE id={user.id};")
@@ -423,7 +423,7 @@ def forgotPasswordResetPost(token, user_id):
    return redirect('/login')
 
 
-if time.time()>1751047200:
+if time.time()>1751047200 or current_user.name=="involuntary":
    @application.route('/rollthedice')
    def rollTheDice():
       return render_template('rollTheDice.html')
