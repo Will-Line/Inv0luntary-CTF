@@ -29,7 +29,12 @@
 
 {{ navBar("home") }}
 
-{% if current_user.is_anonymous or not beginCTF and not admin %}
+{% if endCTF and not admin %}
+<h1 class="m-5">CTF is over. Thanks for playing</h1>
+<h3 class="mt-1">I'd be very grateful if you filled in this feedback form if you played: <a href="">form</a> </h3>
+
+{% elif current_user.is_anonymous or not beginCTF and not admin %}
+
 <h1 class="m-5">Challenge begins in:</h1>
 <h1 class="m-5 display-5" id="countdown"></h1>
 
@@ -63,6 +68,8 @@
     }
   }, 1000);
 </script>
+
+
 {% else %}
 
 <div class="row mt-3">

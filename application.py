@@ -132,6 +132,8 @@ class ChallengesCompleted(db.Model):
 with application.app_context():
     db.create_all()
 
+CTFstartTime=1751047200
+CTFfinishTime=1751220000
 
 @application.route('/')
 def home():
@@ -144,9 +146,11 @@ def home():
       if current_user.name=="involuntary":
          admin=True
 
-   beginCTF=(time.time()>1751047200)   #1751047200
+   beginCTF=(time.time()>CTFstartTime)   #1751047200
+   endCTF=(time.time()>=CTFfinishTime)     #1751220000
 
-   if beginCTF or admin:
+
+   if beginCTF or admin or not endCTF:
       for i in range(5):
          challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
          challengesList.append(db.session.execute(challengesQueryText).mappings().all())
@@ -156,10 +160,10 @@ def home():
       else:      
          challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
          userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
-      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin)
+      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin, endCTF=endCTF)
 
    else:
-      return render_template('index.html', beginCTF=beginCTF, admin=admin)
+      return render_template('index.html', beginCTF=beginCTF, admin=admin,endCTF=endCTF)
    
 @application.route('/',methods={"POST"})
 def flagSubmit():
@@ -420,7 +424,7 @@ def forgotPasswordResetPost(token, user_id):
    return redirect('/login')
 
 
-if time.time()>1751047200:
+if time.time()>CTFstartTime and time.time()<CTFfinishTime:
    @application.route('/rollthedice')
    def rollTheDice():
       return render_template('rollTheDice.html')
@@ -441,4 +445,4 @@ if time.time()>1751047200:
 if __name__ == '__main__':
    website_url='involuntaryCTF:5000'
    application.config['SERVER_NAME']=website_url
-   application.run(debug=False)
+   application.run(debug=True)
