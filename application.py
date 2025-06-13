@@ -423,7 +423,7 @@ def forgotPasswordResetPost(token, user_id):
    return redirect('/login')
 
 
-if time.time()>1751047200 or current_user.name=="involuntary":
+if time.time()>1751047200:
    @application.route('/rollthedice')
    def rollTheDice():
       return render_template('rollTheDice.html')
