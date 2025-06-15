@@ -18,11 +18,11 @@
 
 <body class="text-center">
   {% macro navBar(page) -%}
-  <nav class="navbar-colour navbar navbar-expand-lg">
+  <nav class="navbar-colour navbar-dark navbar navbar-expand-lg">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
         aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon navbar-toggler-icon-white"></span>
       </button>
       <img src="/static/images/Logo 2.png" alt="logo" width="50" height="50">
       <a class="navbar-brand" href="/">involuntaryCTF</a>
@@ -79,7 +79,7 @@
     aria-labelledby="accountOffCanvasLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="accountOffCanvasLabel">{{current_user.name}}</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
       <div class="col">
