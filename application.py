@@ -176,16 +176,16 @@ def flagSubmit():
       challengesCompleted=list(db.session.execute(selectText).mappings().all()[0].items())[0][1]
 
    if not flag:
-      flash("That's not a valid flag. Try again.","flag")
+      flash("That's not a valid flag. Try again.","homePage")
       return redirect(url_for('home'))
    elif challengesCompleted:
-      flash("You've submitted that flag before","flag")
+      flash("You've submitted that flag before","homePage")
       return redirect(url_for('home'))
    else:
       updateChallengeComplete=text(f"UPDATE challenges_completed SET challenge{flag.challengeID}=1 WHERE userID={current_user.id}")
       db.session.execute(updateChallengeComplete)
       current_user.score+=flag.scoreVal
-      flash("Congratulations on a correct flag","flag")
+      flash("Congratulations on a correct flag","homePage")
       db.session.commit()
 
    return redirect(url_for('home'))
@@ -299,14 +299,21 @@ def changeEmail():
 
    user = Users.query.filter_by(name=current_user.name).first()
 
-    # check if the user actually exists
+   emailExists=Users.query.filter_by(email=email).count()==1
+
+    # check if the `user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if not user or not check_password_hash(user.passwords, password):
-        flash('Incorrect password',"changeEmail")
+        flash('Incorrect password',"homePage")
         return redirect('/') # if the user doesn't exist or password is wrong, reload the page
 
+   if emailExists and not user:
+      flash('A user with that email already exists',"homePage")
+      return redirect('/') 
+
+
    if current_user.email==email:
-      flash('Must be a new email',"changeEmail")
+      flash('Must be a new email',"homePage")
       return redirect('/')
 
    query=text(f"UPDATE users SET email='{email}' WHERE id={current_user.id};")
@@ -326,16 +333,16 @@ def changePassword():
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
    if not user or not check_password_hash(user.passwords, currentPassword):
-      flash('Incorrect password',"changePassword")
+      flash('Incorrect password',"homePage")
       return redirect('/') # if the user doesn't exist or password is wrong, reload the page
    elif current_user.passwords==hashedNewPassword:
-      flash('Can\'t have the same password', "changePassword")
+      flash('Can\'t have the same password', "homePage")
       return redirect('/')
 
    query=text(f"UPDATE users SET passwords='{hashedNewPassword}' WHERE id={current_user.id};")
    db.session.execute(query)
    db.session.commit()
-   flash('Password changed',"changePassword")
+   flash('Password changed',"homePage")
 
    return redirect('/')
 
