@@ -1,0 +1,21 @@
+Accepted connection from ('127.0.0.1', 36556)
+Closing connection to ('127.0.0.1', 36556)
+Accepted connection from ('127.0.0.1', 36562)
+Closing connection to ('127.0.0.1', 36562)
+Accepted connection from ('127.0.0.1', 49402)
+Closing connection to ('127.0.0.1', 49402)
+Closing connection to ('127.0.0.1', 49402)
+Closing connection to ('127.0.0.1', 49402)
+Traceback (most recent call last):
+  File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Cryptography/Deeper in the catacombs/deeperInTheCatacombs.py", line 246, in service_connection
+    sock.send(" - Generating your public / private key-pairs now . . .\n".encode("utf-8"))
+OSError: [Errno 9] Bad file descriptor
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Cryptography/Deeper in the catacombs/deeperInTheCatacombs.py", line 298, in <module>
+    service_connection(key, mask)
+  File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Cryptography/Deeper in the catacombs/deeperInTheCatacombs.py", line 280, in service_connection
+    userData.pop(key.data.addr[1])
+KeyError: 49402
