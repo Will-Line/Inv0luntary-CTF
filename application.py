@@ -11,6 +11,7 @@ import time
 import boto3
 from botocore.exceptions import ClientError
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+import subprocess
 
 def get_secret():
    secret_name = "rds!db-1c7aa2ab-fe9c-4980-9055-06a0761afac4"
@@ -150,7 +151,7 @@ def home():
    endCTF=(time.time()>=CTFfinishTime)     #1751220000
 
 
-   if beginCTF or admin or not endCTF:
+   if (beginCTF and not endCTF) or admin:
       for i in range(5):
          challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
          challengesList.append(db.session.execute(challengesQueryText).mappings().all())
@@ -160,7 +161,17 @@ def home():
       else:      
          challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
          userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
+      
+      #Running in good form challenge
+      userPortNum=current_user.id+6000
+
+      #subprocess.run(["chmod", "+x challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh"])
+      subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
+
+
       return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin, endCTF=endCTF)
+
+
 
    else:
       return render_template('index.html', beginCTF=beginCTF, admin=admin,endCTF=endCTF)
