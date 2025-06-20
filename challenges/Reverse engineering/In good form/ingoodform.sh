@@ -1,7 +1,9 @@
 #! /bin/bash
 
-number=$(ps -ef | grep ncat -c)
-if [[ $number -lt 500 ]]; then
+number=$(netstat -ano | grep 0.0.0.0:$1 | wc -l)
+
+echo $number
+if [[ $number -lt 3 ]]; then
     ncat -l -p $1 -c ~/Documents/a.out &
     echo "restarted";
 else

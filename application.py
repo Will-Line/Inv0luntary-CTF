@@ -133,7 +133,7 @@ class ChallengesCompleted(db.Model):
 with application.app_context():
     db.create_all()
 
-CTFstartTime=1751047200
+CTFstartTime=1651047200
 CTFfinishTime=1751220000
 
 @application.route('/')
@@ -163,14 +163,17 @@ def home():
          userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
       
       #Running in good form challenge
-      userPortNum=current_user.id+6000
+      if current_user.is_anonymous==False and beginCTF:
+         userPortNum=current_user.id+6000
 
-      #subprocess.run(["chmod", "+x challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh"])
-      subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
+         #subprocess.run(["chmod", "+x challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh"])
+
+         result = int(subprocess.check_output(f"ps -ef | grep watch | grep {userPortNum} | wc -l", shell = True, executable = "/bin/bash", stderr = subprocess.STDOUT).decode('ascii').strip("\n"))
+         if result<3:
+            subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
 
 
       return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin, endCTF=endCTF)
-
 
 
    else:
