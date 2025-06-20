@@ -4,8 +4,29 @@
 
 {% block body %}
 {{ navBar("signup") }}
-<form method="POST" class="form-signin mt-5">
-  <h1 class="h3 mb-3 font-weight-normal">Sign up</h1>
+<script>
+  function checkSignUp(form) {
+    name = form.inputUsername.value
+    email = form.inputEmail.value
+
+
+    if (name.length > 50) {
+      document.getElementById("errorSignUp").innerHTML = "Name must be less than 50 characters";
+      return false
+    }
+    else if (email.length > 75) {
+      document.getElementById("errorSignUp").innerHTML = "Email must be less than 75 characters";
+      return false
+    }
+    else {
+      return true
+    }
+    return false
+  } 
+</script>
+
+<form method="POST" class="form-signin mt-5" onSubmit="return checkSignUp(this)"">
+  <h1 class=" h3 mb-3 font-weight-normal">Sign up</h1>
   <label for="inputEmail" class="sr-only">Email address</label>
   <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required=""
     autofocus="">
@@ -19,6 +40,10 @@
     <input type="checkbox" onclick="togglePassword('inputPassword')"> Show password
   </p>
 
+  <p id="errorSignUp" name="errorMessage" style="color: rgb(232, 27, 27);">
+
+  </p>
+
   {{ flashMessages("signup") }}
   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
 
@@ -26,6 +51,8 @@
     <a href="/login">Already have an account --> login</a>
   </div>
 </form>
+
+
 
 
 {% endblock %}

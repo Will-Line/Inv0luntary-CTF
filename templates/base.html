@@ -55,7 +55,7 @@
             {% else %}
             <a class="nav-link" href="https://discord.gg/dBZUG3Zd4z">Discord</a>
             {% endif %}
-          </li> 
+          </li>
           <li class="nav-item mx-5">
             {% if current_user.is_anonymous%}
             {% if page=="login"%}
@@ -126,25 +126,29 @@
   <div class="modal fade" id="changeEmail" tabindex="-1" aria-labelledby="changeEmailModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form method="POST" class="form-signin mt-3" action="/reset-email">
-          <div class="modal-body">
-            Enter the new email and your password.<br><br>
+        <form method="POST" class="form-signin mt-3" action="/reset-email" onSubmit="return checkEmail(this)"></form>
+        <div class="modal-body">
+          Enter the new email and your password.<br><br>
 
-            <label for="newEmail" class="sr-only">New email address</label>
-            <input type="email" name="newEmail" id="newEmail" class="form-control" placeholder="Email address"
-              required="" autofocus="">
-            <label for="password" class="sr-only">Current password</label>
-            <input type="password" name="password" id="password" class="form-control" placeholder="Password"
-              required="">
-            <p class="col p-3">
-              <input type="checkbox" onclick="togglePassword('password')"> Show password
-            </p>
+          <label for="newEmail" class="sr-only">New email address</label>
+          <input type="email" name="newEmail" id="newEmail" class="form-control" placeholder="Email address" required=""
+            autofocus="">
+          <label for="password" class="sr-only">Current password</label>
+          <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+            required="">Add commentMore actions
+          <p class="col p-3">
+            <input type="checkbox" onclick="togglePassword('password')"> Show password
+          </p>
 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-primary" type="submit">Enter</button>
-          </div>
+          <p id="errorEmail" name="errorEmail" style="color: rgb(232, 27, 27);">
+
+          </p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary" type="submit">Enter</button>
+        </div>
         </form>
       </div>
     </div>
@@ -170,7 +174,7 @@
               required="">
 
             <p id="errorMessage" name="errorMessage" style="color: rgb(232, 27, 27);">
-              
+
             </p>
           </div>
           <div class="modal-footer">
@@ -185,17 +189,17 @@
   {%- endmacro %}
 
   {% macro flashMessages(category) -%}
-    <p>
-      {% with messages=get_flashed_messages(category_filter=[category]) %}
-      {% if messages %}
+  <p>
+    {% with messages=get_flashed_messages(category_filter=[category]) %}
+    {% if messages %}
 
-      {%- for msg in messages %}
-      {{ msg }}
-      {% endfor -%}
+    {%- for msg in messages %}
+    {{ msg }}
+    {% endfor -%}
 
-      {% endif %}
-      {% endwith %}
-    </p>
+    {% endif %}
+    {% endwith %}
+  </p>
   {%- endmacro %}
 
   {% macro privacyPolicy() -%}
@@ -236,17 +240,17 @@
 
       // If password not entered
       if (password1 == '')
-        document.getElementById("errorMessage").innerHTML="Enter a password";
-        
+        document.getElementById("errorMessage").innerHTML = "Enter a password";
+
 
       // If confirm password not entered
       else if (password2 == '')
-        document.getElementById("errorMessage").innerHTML="Enter the confirm password";
-        
+        document.getElementById("errorMessage").innerHTML = "Enter the confirm password";
+
 
       // If Not same return False.    
       else if (password1 != password2) {
-        document.getElementById("errorMessage").innerHTML="Passwords do not match";
+        document.getElementById("errorMessage").innerHTML = "Passwords do not match";
         return false;
       }
 
@@ -257,6 +261,22 @@
 
       return false;
     }
+  </script>
+
+  <script>
+    function checkEmail(form) {
+      email = form.inputEmail.value
+
+      if (email.length > 75) {
+        document.getElementById("errorEmail").innerHTML = "Email must be less than 75 characters";
+        return false
+      }
+      else {
+        return true
+      }
+      return false
+    }
+
   </script>
   {% block body %}
 

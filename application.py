@@ -240,7 +240,13 @@ def signup():
 def signup_post():
    # code to validate and add user to database goes here
    email = request.form.get('inputEmail')
+   if len(email)>75:
+         return redirect('/')
+
    name = request.form.get('inputUsername')
+   if len(name)>50:
+         return redirect('/')
+
    password = request.form.get('inputPassword')
 
    user = Users.query.filter_by(email=email).first() or Users.query.filter_by(name=name).first() # if this returns a user, then the email already exists in database
@@ -298,6 +304,9 @@ if time.time()>1751047200:
 @login_required
 def changeEmail():
    email = request.form.get('newEmail')
+   if len(email)>75:
+      return redirect('/')
+
    password = request.form.get('password')
 
    user = Users.query.filter_by(name=current_user.name).first()
