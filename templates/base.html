@@ -126,19 +126,23 @@
   <div class="modal fade" id="changeEmail" tabindex="-1" aria-labelledby="changeEmailModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form method="POST" class="form-signin mt-3" action="/reset-email">
+        <form method="POST" class="form-signin mt-3" action="/reset-email" onSubmit="return checkEmail(this)">
           <div class="modal-body">
             Enter the new email and your password.<br><br>
 
-              <label for="newEmail" class="sr-only">New email address</label>
-              <input type="email" name="newEmail" id="newEmail" class="form-control" placeholder="Email address"
-                required="" autofocus="">
-              <label for="password" class="sr-only">Current password</label>
-              <input type="password" name="password" id="password" class="form-control" placeholder="Password"
-                required="">
-              <p class="col p-3">
-                <input type="checkbox" onclick="togglePassword('password')"> Show password
-              </p>
+            <label for="newEmail" class="sr-only">New email address</label>
+            <input type="email" name="newEmail" id="newEmail" class="form-control" placeholder="Email address"
+              required="" autofocus="">
+            <label for="password" class="sr-only">Current password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+              required="">
+            <p class="col p-3">
+              <input type="checkbox" onclick="togglePassword('password')"> Show password
+            </p>
+
+            <p id="errorEmail" name="errorEmail" style="color: rgb(232, 27, 27);">
+
+            </p>
 
           </div>
           <div class="modal-footer">
@@ -256,6 +260,22 @@
 
       return false;
     }
+  </script>
+
+  <script>
+    function checkEmail(form) {
+      email = form.inputEmail.value
+
+      if (email.length > 75) {
+        document.getElementById("errorEmail").innerHTML = "Email must be less than 75 characters";
+        return false
+      }
+      else {
+        return true
+      }
+      return false
+    }
+
   </script>
   {% block body %}
 
