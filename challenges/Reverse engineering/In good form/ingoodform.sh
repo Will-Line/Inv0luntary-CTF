@@ -1,11 +1,11 @@
 #! /bin/bash
 
-number=$(ps -ef | grep ncat -c)
-if [[ $number -eq 1 ]]; then
-    ncat -l -p 1299 -c /var/app/current/challenges/Reverse\ engineering/In\ good\ form/a.out &
+number=$(netstat -ano | grep 0.0.0.0:$1 | wc -l)
+
+echo $number
+if [[ $number -lt 3 ]]; then
+    ncat -l -p $1 -c /var/app/current/challenges/Reverse\ engineering/In\ good\ form/a.out &
     echo "restarted";
 else
     echo "still running"
 fi
-
-
