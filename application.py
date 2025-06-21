@@ -474,6 +474,10 @@ if time.time()>CTFstartTime and time.time()<CTFfinishTime:
       else:
          return {"flag":f"incorrect guess again. The number was {randomNum}"}
 
+@application.route('/privacypolicy')
+def privacyPolicy():
+   return render_template('privacyPolicy.html')
+
 if __name__ == '__main__':
    website_url='involuntaryCTF:5000'
    application.config['SERVER_NAME']=website_url
