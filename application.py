@@ -174,7 +174,7 @@ def home():
             subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
 
       
-      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin,endCTF=endCTF)
+      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin,endCTF=endCTF,userPortNum=userPortNum)
 
    else:
       return render_template('index.html', beginCTF=beginCTF, admin=admin,endCTF=endCTF)
