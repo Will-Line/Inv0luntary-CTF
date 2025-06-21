@@ -129,6 +129,7 @@ class ChallengesCompleted(db.Model):
    challenge7 = db.Column(db.Boolean)
    challenge8 = db.Column(db.Boolean)
    challenge9 = db.Column(db.Boolean)
+   challenge10 =db.Column(db.Boolean)
 
 
 with application.app_context():
