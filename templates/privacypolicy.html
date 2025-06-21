@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
+
+{% block body %}
+
+{{ navBar("privacyPolicy") }}
+
+<h2 class="mt-3">
+    Privacy policy
+</h2>
+
+<p>
+<h5>Data storage</h5>
+I store emails and usernames in plaintext in the database, but passwords are hashed to be unreadable. Access to this database is very limited.
+<br>
+There is only one cookie which is used to determine if you want to stay logged in.
+<br>
+Nothing else about users is tracked or stored.
+<br>
+<h5 class="mt-5">Removing data</h5>
+All data will be deleted within a week of the CTF ending on the 29th June.
+<br>If you would like to delete it sooner email involuntary@involuntaryCTF.net and I will delete it.
+</p>
+
+{% endblock %}
