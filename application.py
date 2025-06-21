@@ -40,7 +40,7 @@ def get_secret():
 db = SQLAlchemy()
 
 application = Flask(__name__)
-application.secret_key = "super secret key" #DO NOT LEAVE THIS LIKE THIS
+application.secret_key = "ctC$p#QdAceEcUv6YUS*9AQ#YfN@Ku47" #DO NOT LEAVE THIS LIKE THIS
 
 application.config.update(dict(
     DEBUG = True,
