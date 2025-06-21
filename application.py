@@ -151,6 +151,7 @@ def home():
    if not current_user.is_anonymous:
       if current_user.name=="involuntary":
          admin=True
+         userPortNum=current_user.id+6000
 
    if (beginCTF and not endCTF) or admin:
       for i in range(5):
