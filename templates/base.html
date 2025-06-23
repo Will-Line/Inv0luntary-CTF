@@ -58,7 +58,7 @@
           </li>
           <li class="nav-item mx-5">
             {% if current_user.is_anonymous%}
-            {% if page=="login"%}
+            {% if page=="login" or page=="signup"%}
             <a class="nav-link active" aria-current="page" href="/signup">Sign-up/login</a>
             {% else %}
             <a class="nav-link" href="/signup">Sign-up/login</a>
@@ -67,6 +67,17 @@
             <a class="nav-link" data-bs-toggle="offcanvas" href="#accountOffCanvas" role="button"
               aria-controls="accountOffCanvas">
               Account
+            </a>
+            {% endif %}
+          </li>
+          <li class="nav-item mx-5">
+            {% if page=="privacyPolicy"%}
+            <a class="nav-link active" aria-current="page" href="/privacypolicy">
+            Privacy policy
+            </a>
+            {% else %}
+            <a class="nav-link" href="/privacypolicy">
+            Privacy policy
             </a>
             {% endif %}
           </li>
@@ -205,8 +216,9 @@
   {% macro privacyPolicy() -%}
   <div style="    position: fixed;
     bottom: 0;
-    width: 100%;">
-    <nav class="navbar navbar-dark navbar-colour">
+    width: 100%;
+    ">
+    <nav class="navbar navbar navbar-colour">
       <div class="container-fluid">
         <a class="nav-item" href="/privacypolicy">
           <p>Privacy policy</p>
