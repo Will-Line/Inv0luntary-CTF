@@ -147,6 +147,8 @@ def home():
    beginCTF=(time.time()>CTFstartTime)   #1751047200
    endCTF=(time.time()>=CTFfinishTime)     #1751220000
 
+   launchForm=time.time()>=1751198400        #1751198400 6 hours before the end
+
    admin=False
 
    if not current_user.is_anonymous:
@@ -156,7 +158,11 @@ def home():
 
    if (beginCTF and not endCTF) or admin:
       for i in range(5):
-         challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
+         if not launchForm:
+            challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\" AND challengeID<11")
+         else:
+            challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\"")
+         
          challengesList.append(db.session.execute(challengesQueryText).mappings().all())
 
       if current_user.is_anonymous:
@@ -176,10 +182,10 @@ def home():
             subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
 
       
-      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin,endCTF=endCTF,userPortNum=userPortNum)
+      return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin,endCTF=endCTF,userPortNum=userPortNum, launchForm=launchForm)
 
    else:
-      return render_template('index.html', beginCTF=beginCTF, admin=admin,endCTF=endCTF)
+      return render_template('index.html', beginCTF=beginCTF, admin=admin,endCTF=endCTF, launchForm=launchForm)
 
 
 @application.route('/',methods={"POST"})
