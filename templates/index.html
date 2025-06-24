@@ -236,5 +236,19 @@
 {% endcall %}
 {% endif %}
 
+{% if launchForm %}
+{% call taskModal(11,'Feedback',50, challengesCompleted[1][11]) %}
+<p>
+  Thanks for playing my CTF. If you'd like to give feedback please fill in this form. There will be a flag at the end.
+  <br>
+  <br>
+  <a href="">form</a>
+
+</p>
+{% endcall %}
+{% endif %}
+
+
 {{super()}}
+
 {% endblock %}
