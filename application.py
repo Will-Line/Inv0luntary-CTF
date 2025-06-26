@@ -293,34 +293,6 @@ def logout():
    logout_user()
    return redirect('/')
 
-if time.time()>1751047200:
-   @application.route('/downloadTimeline')
-   @login_required
-   def downloadTimeline():
-      path='challenges/Forensics/timeline challenge/files.zip'
-      #path='/'
-      return send_file(path, as_attachment=True)
-
-   @application.route('/downloadFlagDoesntBite')
-   @login_required
-   def downloadFlagDoesntBite():
-      path='challenges/Reverse engineering/basic assembly/a.out'
-      #path='/'
-      return send_file(path, as_attachment=True)
-
-   @application.route('/downloadBasicPython')
-   @login_required
-   def downloadBasicPython():
-      path='challenges/Reverse engineering/Basic python/basicPython.py'
-      #path='/'
-      return send_file(path, as_attachment=True)
-
-   @application.route('/downloadInGoodForm')
-   @login_required
-   def downloadInGoodForm():
-      path='challenges/Reverse engineering/In good form/GoodForm.c'
-      return send_file(path, as_attachment=True)
-
 
 @application.route('/reset-email', methods=['POST'])
 @login_required
@@ -458,13 +430,29 @@ def forgotPasswordResetPost(token, user_id):
    return redirect('/login')
 
 
-if time.time()>CTFstartTime and time.time()<CTFfinishTime:  #only run during CTF
-   @application.route('/rollthedice')
-   def rollTheDice():
+def CTFRunningCheck():
+   if current_user.is_anonymous==False:
+      if current_user.name=="involuntary":
+         return True
+   else:
+      if (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+         return True
+      else: 
+         return False
+
+
+@application.route('/rollthedice')
+def rollTheDice():
+   if not CTFRunningCheck():
+      return redirect("/")
+   else:
       return render_template('rollTheDice.html')
 
-   @application.route('/rollthedice/flag',methods=['POST'])
-   def rollTheDiceFlag():
+@application.route('/rollthedice/flag',methods=['POST'])
+def rollTheDiceFlag():
+   if not CTFRunningCheck():
+      return redirect("/")
+   else:
       request_data = request.get_json()
       randomNum=request_data['number']
       guess=request_data['guess']
@@ -475,6 +463,46 @@ if time.time()>CTFstartTime and time.time()<CTFfinishTime:  #only run during CTF
          return {"flag":flag}
       else:
          return {"flag":f"incorrect guess again. The number was {randomNum}"}
+
+@application.route('/downloadTimeline')
+@login_required
+def downloadTimeline():
+   if not CTFRunningCheck():
+      return redirect("/")
+   else:
+      path='challenges/Forensics/timeline challenge/files.zip'
+      #path='/'
+      return send_file(path, as_attachment=True)
+
+@application.route('/downloadFlagDoesntBite')
+@login_required
+def downloadFlagDoesntBite():
+   if not CTFRunningCheck():
+      return redirect("/")
+   else:
+      path='challenges/Reverse engineering/basic assembly/a.out'
+      #path='/'
+      return send_file(path, as_attachment=True)
+
+@application.route('/downloadBasicPython')
+@login_required
+def downloadBasicPython():
+   if not CTFRunningCheck():
+      return redirect("/")
+   else:
+      path='challenges/Reverse engineering/Basic python/basicPython.py'
+      #path='/'
+      return send_file(path, as_attachment=True)
+
+@application.route('/downloadInGoodForm')
+@login_required
+def downloadInGoodForm():
+   if not CTFRunningCheck():
+      return redirect("/")
+   else:   
+      path='challenges/Reverse engineering/In good form/GoodForm.c'
+      return send_file(path, as_attachment=True)
+
 
 @application.route('/privacypolicy')
 def privacyPolicy():
