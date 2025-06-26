@@ -133,7 +133,7 @@ class ChallengesCompleted(db.Model):
 with application.app_context():
     db.create_all()
 
-CTFstartTime=1751047200
+CTFstartTime=1751969694
 CTFfinishTime=1751220000
 
 @application.route('/')
@@ -287,33 +287,6 @@ def logout():
    logout_user()
    return redirect('/')
 
-if time.time()>1751047200:
-   @application.route('/downloadTimeline')
-   @login_required
-   def downloadTimeline():
-      path='challenges/Forensics/timeline challenge/files.zip'
-      #path='/'
-      return send_file(path, as_attachment=True)
-
-   @application.route('/downloadFlagDoesntBite')
-   @login_required
-   def downloadFlagDoesntBite():
-      path='challenges/Reverse engineering/basic assembly/a.out'
-      #path='/'
-      return send_file(path, as_attachment=True)
-
-   @application.route('/downloadBasicPython')
-   @login_required
-   def downloadBasicPython():
-      path='challenges/Reverse engineering/Basic python/basicPython.py'
-      #path='/'
-      return send_file(path, as_attachment=True)
-
-   @application.route('/downloadInGoodForm')
-   @login_required
-   def downloadInGoodForm():
-      path='challenges/Reverse engineering/In good form/GoodForm.c'
-      return send_file(path, as_attachment=True)
 
 
 @application.route('/reset-email', methods=['POST'])
@@ -324,8 +297,6 @@ def changeEmail():
       return redirect('/')
 
    password = request.form.get('password')
-
-
 
    user = Users.query.filter_by(name=current_user.name).first()
 
@@ -461,13 +432,20 @@ def forgotPasswordResetPost(token, user_id):
    return redirect('/login')
 
 
-if time.time()>CTFstartTime and time.time()<CTFfinishTime:
-   @application.route('/rollthedice')
-   def rollTheDice():
+
+#if (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+@application.route('/rollthedice')
+def rollTheDice():
+   if not (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+      return redirect("/")
+   else:
       return render_template('rollTheDice.html')
 
-   @application.route('/rollthedice/flag',methods=['POST'])
-   def rollTheDiceFlag():
+@application.route('/rollthedice/flag',methods=['POST'])
+def rollTheDiceFlag():
+   if not (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+      return redirect("/")
+   else:
       request_data = request.get_json()
       randomNum=request_data['number']
       guess=request_data['guess']
@@ -479,6 +457,45 @@ if time.time()>CTFstartTime and time.time()<CTFfinishTime:
       else:
          return {"flag":f"incorrect guess again. The number was {randomNum}"}
 
+@application.route('/downloadTimeline')
+@login_required
+def downloadTimeline():
+   if not (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+      return redirect("/")
+   else:
+      path='challenges/Forensics/timeline challenge/files.zip'
+      #path='/'
+      return send_file(path, as_attachment=True)
+
+@application.route('/downloadFlagDoesntBite')
+@login_required
+def downloadFlagDoesntBite():
+   if not (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+      return redirect("/")
+   else:
+      path='challenges/Reverse engineering/basic assembly/a.out'
+      #path='/'
+      return send_file(path, as_attachment=True)
+
+@application.route('/downloadBasicPython')
+@login_required
+def downloadBasicPython():
+   if not (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+      return redirect("/")
+   else:
+      path='challenges/Reverse engineering/Basic python/basicPython.py'
+      #path='/'
+      return send_file(path, as_attachment=True)
+
+@application.route('/downloadInGoodForm')
+@login_required
+def downloadInGoodForm():
+   if not (time.time()>CTFstartTime and time.time()<CTFfinishTime):
+      return redirect("/")
+   else:   
+      path='challenges/Reverse engineering/In good form/GoodForm.c'
+      return send_file(path, as_attachment=True)
+
 @application.route('/privacypolicy')
 def privacyPolicy():
    return render_template('privacyPolicy.html')
@@ -487,3 +504,5 @@ if __name__ == '__main__':
    website_url='involuntaryCTF:5000'
    application.config['SERVER_NAME']=website_url
    application.run(debug=True)
+
+
