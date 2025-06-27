@@ -133,8 +133,9 @@ class ChallengesCompleted(db.Model):
 with application.app_context():
     db.create_all()
 
-CTFstartTime=1751969694
-CTFfinishTime=1751220000
+CTFstartTime=1750000000
+            #1751055512
+CTFfinishTime=1751920000
 
 @application.route('/')
 def home():
@@ -149,6 +150,8 @@ def home():
 
    beginCTF=(time.time()>CTFstartTime)   #1751047200
    endCTF=(time.time()>=CTFfinishTime)     #1751220000
+
+   print(time.time())
 
    launchForm=time.time()>=1751198400        #1751198400 6 hours before the end
 
@@ -174,6 +177,7 @@ def home():
          #subprocess.run(["chmod", "+x challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh"])
 
          result = int(subprocess.check_output(f"ps -ef | grep watch | grep {userPortNum} | wc -l", shell = True, executable = "/bin/bash", stderr = subprocess.STDOUT).decode('ascii').strip("\n"))
+         print(result)
          if result<3:
             subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
 
