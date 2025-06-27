@@ -152,6 +152,8 @@ def home():
 
    admin=False
 
+   userPortNum=0
+
    if not current_user.is_anonymous:
       if current_user.name=="involuntary":
          admin=True
@@ -181,8 +183,7 @@ def home():
          result = int(subprocess.check_output(f"ps -ef | grep watch | grep {userPortNum} | wc -l", shell = True, executable = "/bin/bash", stderr = subprocess.STDOUT).decode('ascii').strip("\n"))
          if result<3:
             subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
-
-      
+ 
       return render_template('index.html',taskTypesList=taskTypesList ,challenges=challengesList,beginCTF=beginCTF, challengesCompleted=userChallengesCompleted, admin=admin,endCTF=endCTF,userPortNum=userPortNum, launchForm=launchForm)
 
    else:
