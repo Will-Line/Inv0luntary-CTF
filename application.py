@@ -432,14 +432,7 @@ def forgotPasswordResetPost(token, user_id):
 
 
 def CTFRunningCheck():
-   if current_user.is_anonymous==False:
-      if current_user.name=="involuntary":
-         return True
-   else:
-      if (time.time()>CTFstartTime and time.time()<CTFfinishTime):
-         return True
-      else: 
-         return False
+   return True
 
 
 @application.route('/rollthedice')
