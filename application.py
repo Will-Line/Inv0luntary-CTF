@@ -158,10 +158,6 @@ def home():
          userPortNum=current_user.id+6000
 
    if (beginCTF and not endCTF) or admin:
-      if current_user.is_anonymous:
-         return render_template('index.html', beginCTF=beginCTF, admin=admin,endCTF=endCTF, launchForm=launchForm)
-
-
       for i in range(5):
          if not launchForm:
             challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\" AND challengeID<11")
