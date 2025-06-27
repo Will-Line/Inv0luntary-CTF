@@ -12,11 +12,11 @@ int main()
     char inputPassword[256];
 
     //Read files
-    FILE *fd1 = fopen("username.txt", "r");
+    FILE *fd1 = fopen("/var/app/current/challenges/Reverse\ engineering/In\ good\ form/username.txt", "r");
     fgets(username, 256, fd1);
     fflush(stdout);
 
-    FILE *fd2 = fopen("password.txt", "r");
+    FILE *fd2 = fopen("/var/app/current/challenges/Reverse\ engineering/In\ good\ form/password.txt", "r");
     fgets(password, 256, fd2);
     fflush(stdout);   
 
@@ -40,7 +40,7 @@ int main()
     if(strcmp(inputUsername,username) == 0 && strcmp(inputPassword,password)==0)
     {
         //Get flag
-        FILE *fd3 = fopen("flag.txt", "r");
+        FILE *fd3 = fopen("/var/app/current/challenges/Reverse\ engineering/In\ good\ form/flag.txt", "r");
         fgets(flag, 64, fd3);
 
         printf("\nWelcome admin\n");
