@@ -157,7 +157,7 @@ def home():
          admin=True
          userPortNum=current_user.id+6000
 
-   if (beginCTF and not endCTF) or admin:
+   if (beginCTF and not endCTF and current_user.is_anonymous==False) or admin:
       for i in range(5):
          if not launchForm:
             challengesQueryText=text(f"SELECT challengeID, challengeName, scoreVal FROM challenges WHERE challengeType=\"{taskTypesList[i]}\" AND challengeID<11")
