@@ -178,7 +178,7 @@ def home():
 
          #subprocess.run(["chmod", "+x challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh"])
 
-         result = int(subprocess.check_output(f"ps -ef | grep watch | grep {userPortNum} | wc -l", shell = True, executable = "/bin/bash", stderr = subprocess.STDOUT).decode('ascii').strip("\n"))
+         result = int(subprocess.check_output(f"ps -ef | grep watch | grep {userPortNum} | wc -l", shell = True, executable = "/bin/bash", stderr = subprocess.STDOUT))
          print(result)
          if result<3:
             subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=True)
@@ -508,5 +508,3 @@ if __name__ == '__main__':
    website_url='involuntaryCTF:5000'
    application.config['SERVER_NAME']=website_url
    application.run(debug=True)
-
-
