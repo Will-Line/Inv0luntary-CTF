@@ -222,18 +222,19 @@
 
 {% call taskModal(10,'In good form',300, challengesCompleted[1][10]) %}
 <p>
+  <!--
   Here's my login for admins connect to it below.
   <br>
   <br>
   <a href="/downloadInGoodForm">source code</a>
   <br>
   <br>
-  <code>nc involuntaryctf.net {{ userPortNum }}</code>
-
+  <code>nc involuntaryctf.net {{ current_user.id + 6000 }}</code>
+!-->
+This challenge is currently being fixed
 </p>
-{% endcall %}
 
-{% if launchForm %}Add commentMore actions
+{% if launchForm %}
 {% call taskModal(11,'Feedback',50, challengesCompleted[1][11]) %}
 <p>
   Thanks for playing my CTF. If you'd like to give feedback please fill in this form. There will be a flag at the end.
