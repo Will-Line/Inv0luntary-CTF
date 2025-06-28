@@ -19,3 +19,4 @@ Traceback (most recent call last):
   File "/home/involuntary/Documents/school stuff/EPQ/MyWebapp/challenges/Cryptography/Deeper in the catacombs/deeperInTheCatacombs.py", line 280, in service_connection
     userData.pop(key.data.addr[1])
 KeyError: 49402
+[?1049h[22;0;0t[1;24r(B[m[4l[?7h[H[2J[7Ginvoluntary-HP-ENVY-x360-2-in-1-Laptop-15-ey0xxx: Sat Jun 28 08:06:33 2025[3;1Hhello[24;80H[24;1H[?1049l[23;0;0t[?1l>[?1049h[22;0;0t[1;24r(B[m[4l[?7h[H[2J[7Ginvoluntary-HP-ENVY-x360-2-in-1-Laptop-15-ey0xxx: Sat Jun 28 08:06:40 2025[3;1Hhello[24;80H[1;75H5[24;80H[1;74H50[24;80H[1;75H5[24;80H[24;1H[?1049l[23;0;0t[?1l>

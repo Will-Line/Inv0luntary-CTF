@@ -129,8 +129,8 @@ class ChallengesCompleted(db.Model):
    challenge7 = db.Column(db.Boolean)
    challenge8 = db.Column(db.Boolean)
    challenge9 = db.Column(db.Boolean)
-   challenge10 =db.Column(db.Boolean)
-#  challenge11 = db.Column(db.boolean)
+   challenge10 = db.Column(db.Boolean)
+   challenge11 = db.Column(db.boolean)
 
 
 with application.app_context():
@@ -171,7 +171,11 @@ def home():
       if current_user.is_anonymous:
          userChallengesCompleted=[]
       else:      
-         challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
+         if not launchForm:
+            challengesCompletedQueryText=text(f"SELECT userID, challenge1, challenge2, challenge3, challenge4, challenge5,challenge6, challenge7, challenge8, challenge9, challenge10 FROM challenges_completed WHERE userID={current_user.id}")
+         else:
+            challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
+         
          userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
       
       #Running in good form challenge
@@ -281,7 +285,7 @@ def signup_post():
 
    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
    new_user = Users(score=0,email=email, name=name, passwords=generate_password_hash(password, method='pbkdf2:sha256'))
-   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0,challenge3=0,challenge4=0,challenge5=0,challenge6=0,challenge7=0,challenge8=0,challenge9=0,challenge10=0)
+   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0,challenge3=0,challenge4=0,challenge5=0,challenge6=0,challenge7=0,challenge8=0,challenge9=0,challenge10=0,chaleenge11=0)
 
    db.session.add(new_user)
    db.session.add(new_challengeCompleted)
