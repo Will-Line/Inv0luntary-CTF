@@ -130,7 +130,7 @@ class ChallengesCompleted(db.Model):
    challenge8 = db.Column(db.Boolean)
    challenge9 = db.Column(db.Boolean)
    challenge10 = db.Column(db.Boolean)
-   challenge11 = db.Column(db.boolean)
+   challenge11 = db.Column(db.Boolean)
 
 
 with application.app_context():
@@ -171,10 +171,7 @@ def home():
       if current_user.is_anonymous:
          userChallengesCompleted=[]
       else:      
-         if not launchForm:
-            challengesCompletedQueryText=text(f"SELECT userID, challenge1, challenge2, challenge3, challenge4, challenge5,challenge6, challenge7, challenge8, challenge9, challenge10 FROM challenges_completed WHERE userID={current_user.id}")
-         else:
-            challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
+         challengesCompletedQueryText=text(f"SELECT * FROM challenges_completed WHERE userID={current_user.id}")
          
          userChallengesCompleted=list(db.session.execute(challengesCompletedQueryText).mappings().all()[0].items())
       
