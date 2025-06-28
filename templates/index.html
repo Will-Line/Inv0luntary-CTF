@@ -226,6 +226,7 @@ console.log(Date.now())
 
 {% call taskModal(10,'In good form',300, challengesCompleted[1][10]) %}
 <p>
+  <!--
   Here's my login for admins connect to it below.
   <br>
   <br>
@@ -233,10 +234,11 @@ console.log(Date.now())
   <br>
   <br>
   <code>nc involuntaryctf.net {{ current_user.id + 6000 }}</code>
-
+!-->
+This challenge is currently being fixed
 </p>
 {% endcall %}
-{% endif %}
+
 
 {% if launchForm %}
 {% call taskModal(11,'Feedback',50, challengesCompleted[1][11]) %}
@@ -248,6 +250,8 @@ console.log(Date.now())
 
 </p>
 {% endcall %}
+{% endif %}
+
 {% endif %}
 
 
