@@ -181,7 +181,7 @@ def home():
 
          #subprocess.run(["chmod", "+x challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh"])
 
-         result = int(subprocess.check_output(f"ps -ef | grep watch | grep {userPortNum} | wc -l", shell = False, executable = "/bin/bash", stderr = subprocess.STDOUT).decode('ascii').strip("\n"))
+         result = int(subprocess.check_output(f"ps -ef | grep watch | grep {userPortNum} | wc -l", shell = False, executable = "/bin/bash", stderr = subprocess.STDOUT))
          if result<3:
             subprocess.run([f"nohup watch -n 2 --precise 'challenges/Reverse\ engineering/In\ good\ form/ingoodform.sh {userPortNum}' > /dev/null &"],shell=False)
  
