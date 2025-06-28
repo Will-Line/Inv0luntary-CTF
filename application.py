@@ -128,6 +128,8 @@ class ChallengesCompleted(db.Model):
    challenge7 = db.Column(db.Boolean)
    challenge8 = db.Column(db.Boolean)
    challenge9 = db.Column(db.Boolean)
+   challenge10 = db.Column(db.Boolean)
+   challenge11 = db.Column(db.Boolean)
 
 
 with application.app_context():
@@ -153,7 +155,7 @@ def home():
 
    print(time.time())
 
-   launchForm=time.time()>=1751198400        #1751198400 6 hours before the end
+   launchForm=time.time()>=1741198400        #1751198400 6 hours before the end
 
    if (beginCTF and not endCTF) or admin:
       for i in range(5):
@@ -277,7 +279,7 @@ def signup_post():
 
    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
    new_user = Users(score=0,email=email, name=name, passwords=generate_password_hash(password, method='pbkdf2:sha256'))
-   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0,challenge3=0,challenge4=0,challenge5=0,challenge6=0,challenge7=0,challenge8=0,challenge9=0)
+   new_challengeCompleted = ChallengesCompleted(challenge1=0, challenge2=0,challenge3=0,challenge4=0,challenge5=0,challenge6=0,challenge7=0,challenge8=0,challenge9=0,challenge10=0,challenge11=0)
 
    db.session.add(new_user)
    db.session.add(new_challengeCompleted)
@@ -290,8 +292,6 @@ def signup_post():
 def logout():
    logout_user()
    return redirect('/')
-
-
 
 @application.route('/reset-email', methods=['POST'])
 @login_required
