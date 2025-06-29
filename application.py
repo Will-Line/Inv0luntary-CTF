@@ -193,7 +193,7 @@ def home():
 
 @application.route('/',methods={"POST"})
 def flagSubmit():
-   if time.time()>1751047200 and time.time()<1751216400 or current_user.name=='involuntary':
+   if time.time()>1751047200 and time.time()<1751220000 or current_user.name=='involuntary':
       flagText=request.form.get('flag')
       flag=Challenges.query.filter_by(flagText=flagText).first()
 
